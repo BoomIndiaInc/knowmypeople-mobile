@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/services/user/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
-import { SLIDE_FADE_OPTIONS} from './../../shared/util/component-util';
+import { SLIDE_FADE_OPTIONS } from './../../shared/util/component-util';
 import { SIGNUP_BACKGROUNDS } from './../../shared/util/constant-util';
 @Component({
   selector: 'app-signup',
@@ -93,7 +93,5 @@ export class SignupPage implements OnInit {
     );
   }
 
-  onOpenLogin() {
-    
-  }
+  onOpenLogin() {}
 }

@@ -33,6 +33,9 @@ export class UserService {
     return this.apiService.get('users');
   }
 
+  forgotPassword(email: string) {
+    return this.apiService.post('account/reset-password/init', email, { responseType: 'text' as 'text' }).pipe(share());
+  }
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
