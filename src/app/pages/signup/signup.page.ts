@@ -2,30 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/services/user/user.service';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IonSlides } from '@ionic/angular';
+import { SLIDE_FADE_OPTIONS} from './../../shared/util/component-util';
+import { SIGNUP_BACKGROUNDS } from './../../shared/util/constant-util';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss']
 })
 export class SignupPage implements OnInit {
-  // The account fields for the signup form
-  account: {
-    login: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    langKey: string;
-  } = {
-    login: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    password: '',
-    langKey: 'en'
-  };
+  // Background images on the login page.
+  public backgrounds = SIGNUP_BACKGROUNDS;
+  public slideOpts = SLIDE_FADE_OPTIONS;
 
+  public signupForm: FormGroup;
   // Our translated text strings
   private signupErrorString: string;
   private signupSuccessString: string;
@@ -36,8 +27,18 @@ export class SignupPage implements OnInit {
     public navController: NavController,
     public userService: UserService,
     public toastController: ToastController,
-    public translateService: TranslateService
+    public translateService: TranslateService,
+    public formBuilder: FormBuilder
   ) {
+    this.signupForm = formBuilder.group({
+      login: [''],
+      email: ['', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      password: ['', Validators.compose([Validators.minLength(5), Validators.required])],
+      langKey: ['en', Validators.required]
+    });
+
     this.translateService.get(['SIGNUP_ERROR', 'SIGNUP_SUCCESS', 'EXISTING_USER_ERROR', 'INVALID_PASSWORD_ERROR']).subscribe(values => {
       this.signupErrorString = values.SIGNUP_ERROR;
       this.signupSuccessString = values.SIGNUP_SUCCESS;
@@ -48,11 +49,17 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {}
 
+  slidesDidLoad(slides: IonSlides) {
+    slides.startAutoplay();
+  }
+
   doSignup() {
     // set login to same as email
-    this.account.login = this.account.email;
+    this.signupForm.patchValue({
+      login: this.signupForm.value.email
+    });
     // Attempt to login in through our User service
-    this.userService.signup(this.account).subscribe(
+    this.userService.signup(this.signupForm.value).subscribe(
       async () => {
         const toast = await this.toastController.create({
           message: this.signupSuccessString,
@@ -60,6 +67,7 @@ export class SignupPage implements OnInit {
           position: 'top'
         });
         toast.present();
+        this.signupForm.reset();
       },
       async response => {
         // Unable to sign up
@@ -83,5 +91,9 @@ export class SignupPage implements OnInit {
         toast.present();
       }
     );
+  }
+
+  onOpenLogin() {
+    
   }
 }

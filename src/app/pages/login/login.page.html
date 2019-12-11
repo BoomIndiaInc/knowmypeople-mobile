@@ -4,7 +4,7 @@
     </ion-slide>
   </ion-slides>
   <div class="login-container">
-    <img class="logo" src="assets/img/logo/logo.png" />
+    <img class="logo" src="assets/img/logo/logo-KnowMyPeople.png" />
     <form [formGroup]="loginForm">
       <ion-item>
         <ion-input type="string" formControlName="username"  name="username" placeholder="{{ 'USERNAME' | translate }}"></ion-input>
@@ -16,8 +16,15 @@
         <ion-label>{{ 'REMEMBER_ME' | translate }}</ion-label>
         <ion-toggle formControlName="rememberMe"  name="rememberMe"></ion-toggle>
       </ion-item>
-      <ion-button margin color="danger" [disabled]="!loginForm.valid" (click)="doLogin()">{{ 'LOGIN_BUTTON' | translate }}</ion-button>
-      <p class="forgot-password"(click)="openResetPassword()"><strong>Forgot your password?</strong></p>
+      <ion-button class="ion-margin" color="primary" [disabled]="!loginForm.valid" (click)="doLogin()">{{ 'LOGIN_BUTTON' | translate }}</ion-button>
+      <p class="forgot-password"(click)="onOpenForgotPassword()"><strong>{{ 'FORGOT_YOUR_PASSWORD' | translate }}</strong></p>
     </form>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar class="footer" color="primary" routerLink="/signup">
+    <div (click)="onOpenSignup()">
+      <span >{{ 'NO_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'SIGNUP_HERE' | translate}}</strong>.</span>
+    </div>
+  </ion-toolbar>
+</ion-footer>

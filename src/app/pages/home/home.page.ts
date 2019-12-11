@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.accountService.identity().then(account => {
       if (account === null) {
-        this.goBackToHomePage();
+        this.goBackToLoginPage();
       } else {
         this.account = account;
       }
@@ -30,10 +30,10 @@ export class HomePage implements OnInit {
 
   logout() {
     this.loginService.logout();
-    this.goBackToHomePage();
+    this.goBackToLoginPage();
   }
 
-  private goBackToHomePage(): void {
-    this.navController.navigateBack('');
+  private goBackToLoginPage(): void {
+    this.navController.navigateBack('/login');
   }
 }
