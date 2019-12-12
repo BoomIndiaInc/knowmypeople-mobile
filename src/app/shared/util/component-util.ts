@@ -21,7 +21,7 @@ export const SLIDE_FADE_OPTIONS = {
           const $slideEl = swiper.slides.eq(i);
           const offset$$1 = $slideEl[0].swiperSlideOffset;
           let tx = -offset$$1;
-          if (!swiper.params.virtualTranslate) tx -= swiper.translate;
+          if (!swiper.params.virtualTranslate) { tx -= swiper.translate; }
           let ty = 0;
           if (!swiper.isHorizontal()) {
             ty = tx;
