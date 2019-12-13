@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+import { LoadingController, ToastController } from '@ionic/angular';
+
 export const SLIDE_FADE_OPTIONS = {
     on: {
       beforeInit() {
@@ -57,3 +60,49 @@ export const SLIDE_FADE_OPTIONS = {
       },
     }
   };
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ComponentUtil {
+    loading: any;
+    constructor(
+      private loadingCtrl: LoadingController,
+      public toastController: ToastController
+    ) {}
+
+    showLoading(message, completeCallBack, dismissCallBack) {
+      if(this.loading) return;
+      this.loadingCtrl.create({
+        message: message
+      }).then((loading) => {
+        this.loading = loading;
+        this.loading.present();
+        completeCallBack();
+        this.loading.onDidDismiss().then((dis) => {
+          dismissCallBack()
+        });
+      });
+    }
+
+    hideLoading() {
+      if(this.loading) {
+        this.loading.dismiss();
+        this.loading = null;
+      }
+    }
+
+    async showToast(message, options?) {
+      const toast = await this.toastController.create({
+        message: message,
+        duration: (options && options.duration) ? options.duration : 3000,
+        position: (options && options.position) ? options.position : 'top',
+        cssClass: (options && options.cssClass) ? options.cssClass : 'toast',
+        showCloseButton: (options && options.showCloseButton) ? options.showCloseButton : false,
+        closeButtonText: (options && options.closeButtonText) ? options.closeButtonText : 'OK',
+        dismissOnPageChange: (options && options.dismissOnPageChange) ? options.dismissOnPageChange : false,
+        // color:  (options && options.color) ? options.color : 'primary'
+      });
+      toast.present();
+    }
+  }

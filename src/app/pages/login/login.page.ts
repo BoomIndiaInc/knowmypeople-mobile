@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
   doLogin() {
     this.loginService.login(this.loginForm.value).then(
       () => {
-        this.navController.navigateRoot('/home-results');
+        this.navController.navigateRoot('/voters');
       },
       async err => {
         // Unable to log in

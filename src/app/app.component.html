@@ -47,7 +47,7 @@
               <ion-item [routerLink]="p.url" [class.active-item]="p.active" routerDirection="root" color="primary">
                 <ion-icon slot="start" [name]="p.icon" color="light"></ion-icon>
                 <ion-label>
-                  {{p.title}}
+                  {{p.title | translate}}
                 </ion-label>
                 
               </ion-item>

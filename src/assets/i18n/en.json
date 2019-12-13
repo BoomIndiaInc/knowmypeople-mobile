@@ -82,5 +82,7 @@
 
   "SEARCH_TITLE": "Search",
   "SEARCH_PLACEHOLDER": "Search the items list, e.g. \"Donald Duck\"",
-  "EMPTY_ENTITIES_MESSAGE": "You haven't generated entities yet. Run `yo jhipster-ionic:entity <name>`"
+  "EMPTY_ENTITIES_MESSAGE": "You haven't generated entities yet. Run `yo jhipster-ionic:entity <name>`",
+  "APP_CONFIG_ERROR" : "Default Application Configuration Loaded.",
+  "LOADING_APPLICATION_CONFIGURATION": "Loading Application Configuration"
 }

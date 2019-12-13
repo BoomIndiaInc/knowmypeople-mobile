@@ -6,15 +6,14 @@ import { IonicModule } from '@ionic/angular';
 
 import { PopmenuComponent } from './../../components/popmenu/popmenu.component';
 
-import { HomeResultsPage } from './home-results.page';
+import { VotersPage } from './voters.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeResultsPage
+    component: VotersPage
   }
 ];
-
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HomeResultsPage, PopmenuComponent]
+  declarations: [VotersPage, PopmenuComponent]
 })
-export class HomeResultsPageModule {}
+
+export class VotersPageModule {}

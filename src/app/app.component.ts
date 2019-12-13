@@ -5,6 +5,9 @@ import { Platform, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Pages } from './interfaces/pages';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { AppService } from './services/app/app.service';
+import { DEFAULT_APP_CONFIG } from './shared/util/constant-util';
+import { ComponentUtil } from './shared/util/component-util';
 
 @Component({
   selector: 'app-root',
@@ -13,44 +16,55 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 })
 export class AppComponent {
   public appPages: Array<Pages>;
-  version  = '0.0.1';
+  version  = '0.0.0';
+  loading: any;
+  appConfigErrorString: string;
+  appConfigLoadingMessageString: string;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private translate: TranslateService,
-    public navCtrl: NavController,
-    private router: Router
+    private navCtrl: NavController,
+    private router: Router,
+    private  appService: AppService,
+    private componentUtil: ComponentUtil
   ) {
-    this.initializeApp();
+    this.init();
   }
 
-  initializeApp() {
-    this.appPages = [
-      {
-        title: 'Voters',
-        url: '/home-results',
-        direct: 'root',
-        icon: 'people',
-        active: false
-      },
-      {
-        title: 'About',
-        url: '/about',
-        direct: 'forward',
-        icon: 'information-circle-outline',
-        active: false
-      },
+  init() {
+    this.initTranslate();
+    this.translate.get(['APP_CONFIG_ERROR', 'LOADING_APPLICATION_CONFIGURATION']).subscribe(values => {
+      this.appConfigErrorString = values.APP_CONFIG_ERROR;
+      this.appConfigLoadingMessageString = values.LOADING_APPLICATION_CONFIGURATION;
+    });
 
-      {
-        title: 'Settings',
-        url: '/settings',
-        direct: 'forward',
-        icon: 'cog',
-        active: false
+    this.componentUtil.showLoading('Please wait...', ()=>{
+      this.getAppConfig();
+    }, ()=>{
+      this.splashScreen.hide();
+    })
+  }
+
+  getAppConfig() {
+    this.appService.appConfig().subscribe(
+      response => {
+        this.initializeApp(response);
+      },
+      async response => {
+        // Unable to fetch app configurations
+        // const error = JSON.parse(response.error);
+        console.log(response.error);
+        this.componentUtil.showToast(this.appConfigErrorString ,{cssClass : 'toast', duration: 5000, showCloseButton: true});
+        this.initializeApp(DEFAULT_APP_CONFIG);
       }
-    ];
-
+    );
+  }
+  initializeApp(appConfig) {
+    this.appPages = appConfig.menus;
+    this.version = appConfig.version;
+    
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         this.appPages.map( p => {
@@ -61,9 +75,8 @@ export class AppComponent {
 
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      this.componentUtil.hideLoading();
     }).catch(() => {});
-    this.initTranslate();
   }
 
   initTranslate() {
@@ -79,7 +92,8 @@ export class AppComponent {
     }
 
     // this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
-    //   this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
+    //   // this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
+    //   console.log(values);
     // });
   }
 
