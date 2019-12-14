@@ -3,6 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { LoginService } from '../login/login.service';
+import { USERS_REST_API_URL, RESET_PASSWORD_REST_API_URL, REGISTER_REST_API_URL } from './../../shared/util/service-util'; 
 
 @Injectable({
   providedIn: 'root'
@@ -30,18 +31,19 @@ export class UserService {
   }
 
   findAll(): Observable<any> {
-    return this.apiService.get('users');
+    return this.apiService.get(USERS_REST_API_URL);
   }
 
   forgotPassword(email: string) {
-    return this.apiService.post('account/reset-password/init', email, { responseType: 'text' as 'text' }).pipe(share());
+    return this.apiService.post(RESET_PASSWORD_REST_API_URL, email, { responseType: 'text' as 'text' }).pipe(share());
   }
+  
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
    */
   signup(accountInfo: any) {
-    return this.apiService.post('register', accountInfo, { responseType: 'text' as 'text' }).pipe(share());
+    return this.apiService.post(REGISTER_REST_API_URL, accountInfo, { responseType: 'text' as 'text' }).pipe(share());
   }
 
   /**

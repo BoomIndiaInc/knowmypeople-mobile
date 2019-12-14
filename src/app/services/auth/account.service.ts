@@ -4,6 +4,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
 import { Account } from 'src/model/account.model';
 import { ApiService } from '../api/api.service';
+import { USER_ACCOUNT_REST_API_URL } from './../../shared/util/service-util'; 
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,11 @@ export class AccountService {
   constructor(private sessionStorage: SessionStorageService, private http: HttpClient) {}
 
   fetch(): Observable<HttpResponse<Account>> {
-    return this.http.get<Account>(ApiService.API_URL + '/account', { observe: 'response' });
+    return this.http.get<Account>(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, { observe: 'response' });
   }
 
   save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(ApiService.API_URL + '/account', account, { observe: 'response' });
+    return this.http.post(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, account, { observe: 'response' });
   }
 
   authenticate(identity) {
