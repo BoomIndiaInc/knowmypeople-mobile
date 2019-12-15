@@ -26,6 +26,7 @@ import { NotificationsComponent } from './components/notifications/notifications
 import { AuthServerProvider } from './services/auth/auth-jwt.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ApplicationPreStartupService } from './services/hook/application-pre-startup.service';
+import { Network } from '@ionic-native/network/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -87,7 +88,8 @@ export function preStartupHandler(applicationPreStartupService: ApplicationPreSt
       useClass: AuthExpiredInterceptor,
       multi: true
     },
-    AuthServerProvider
+    AuthServerProvider,
+    Network
   ],
   bootstrap: [AppComponent]
 })

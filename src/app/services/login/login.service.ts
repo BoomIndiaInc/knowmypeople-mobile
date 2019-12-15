@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AccountService } from '../auth/account.service';
 import { AuthServerProvider } from '../auth/auth-jwt.service';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ export class LoginService {
   constructor(
     private accountService: AccountService,
     private authServerProvider: AuthServerProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private localStorage: LocalStorageService, 
+    private sessionStorage: SessionStorageService,
   ) {}
 
   login(credentials, callback?) {
@@ -40,6 +43,17 @@ export class LoginService {
 
   loginWithToken(jwt, rememberMe) {
     return this.authServerProvider.loginWithToken(jwt, rememberMe);
+  }
+
+  loginOffline() {
+    let userIdentity;
+    const localStorageUserIdentity = JSON.parse(this.localStorage.retrieve('userIdentity'));
+    const sessionStorageUserIdentity = JSON.parse(this.sessionStorage.retrieve('userIdentity'));
+    userIdentity = localStorageUserIdentity || sessionStorageUserIdentity;
+    
+    if (userIdentity) {
+      this.accountService.authenticate(userIdentity);
+    }
   }
 
   logout() {

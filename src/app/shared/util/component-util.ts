@@ -109,7 +109,7 @@ export class ComponentUtil {
       cssClass: options && options.cssClass ? options.cssClass : 'toast',
       showCloseButton: options && options.showCloseButton ? options.showCloseButton : false,
       closeButtonText: options && options.closeButtonText ? options.closeButtonText : 'OK',
-      dismissOnPageChange: options && options.dismissOnPageChange ? options.dismissOnPageChange : false
+      // dismissOnPageChange: options && options.dismissOnPageChange ? options.dismissOnPageChange : false
       // color:  (options && options.color) ? options.color : 'primary'
     });
     toast.present();

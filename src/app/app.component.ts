@@ -6,10 +6,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Pages } from './interfaces/pages';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { AppService } from './services/app/app.service';
-import { ComponentUtil } from './shared';
+import { ComponentUtil, DEFAULT_APP_CONFIG } from './shared';
 import { AuthServerProvider } from './services/auth/auth-jwt.service';
 import { AccountService } from './services/auth/account.service';
 import { PropertyResolverService } from './services/property-resolver/property-resolver.service';
+import { NetworkService } from './services/network/network.service';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +36,16 @@ export class AppComponent {
     private componentUtil: ComponentUtil,
     public authServerProvider: AuthServerProvider,
     private accountService: AccountService,
-    private resolverService: PropertyResolverService
+    private resolverService: PropertyResolverService,
+    private networkService: NetworkService
   ) {
     this.init();
+  }
+  /**
+   * Called when this component is being initialized.
+   */
+  ngOnInit(): void {
+
   }
 
   init() {
@@ -74,11 +82,11 @@ export class AppComponent {
         // const error = JSON.parse(response.error);
         console.log(response.error);
         this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000, showCloseButton: true });
-        this.initializeApp();
+        this.initializeApp(this.resolverService.allProperties);
       }
     );
   }
-  initializeApp(appConfig = this.resolverService.allProperties) {
+  initializeApp(appConfig = DEFAULT_APP_CONFIG) {
     this.appPages = appConfig.menus;
     this.version = appConfig.version;
 
@@ -146,7 +154,10 @@ export class AppComponent {
     return showMenu
   }
 
-  // userAuthenticated() {
-  //   return this.accountService.isAuthenticated() && this.authServerProvider.hasValidToken();
-  // }
+  /**
+   * Use this to clean up any subscriptions etc.
+   */
+  ngOnDestroy(): void {
+    this.networkService.unsubscribe();
+  }
 }

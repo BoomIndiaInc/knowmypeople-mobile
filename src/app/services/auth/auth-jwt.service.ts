@@ -12,12 +12,12 @@ import decode from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthServerProvider {
-  constructor(private http: HttpClient, private $localStorage: LocalStorageService, private $sessionStorage: SessionStorageService, private jwtHelper: JwtHelperService) {}
+  constructor(private http: HttpClient, private localStorage: LocalStorageService, private sessionStorage: SessionStorageService, private jwtHelper: JwtHelperService) {}
 
   getToken() {
-    return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
+    return this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
   }
-
+  
   login(credentials): Observable<any> {
     const data = {
       username: credentials.username,
@@ -48,16 +48,16 @@ export class AuthServerProvider {
 
   storeAuthenticationToken(jwt, rememberMe) {
     if (rememberMe) {
-      this.$localStorage.store('authenticationToken', jwt);
+      this.localStorage.store('authenticationToken', jwt);
     } else {
-      this.$sessionStorage.store('authenticationToken', jwt);
+      this.sessionStorage.store('authenticationToken', jwt);
     }
   }
 
   logout(): Observable<any> {
     return new Observable(observer => {
-      this.$localStorage.clear('authenticationToken');
-      this.$sessionStorage.clear('authenticationToken');
+      this.localStorage.clear('authenticationToken');
+      this.sessionStorage.clear('authenticationToken');
       observer.complete();
     });
   }

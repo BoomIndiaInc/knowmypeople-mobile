@@ -4,7 +4,8 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
 import { Account } from 'src/model/account.model';
 import { ApiService } from '../api/api.service';
-import { USER_ACCOUNT_REST_API_URL } from './../../shared/util/service-util'; 
+import { USER_ACCOUNT_REST_API_URL } from './../../shared/util/service-util';
+import { CoreUtil } from 'src/app/shared/util/core-util';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,12 @@ export class AccountService {
   private authenticated = false;
   private authenticationState = new Subject<any>();
 
-  constructor(private sessionStorage: SessionStorageService, private http: HttpClient) {}
+  constructor(private localStorage: LocalStorageService, 
+    private sessionStorage: SessionStorageService, 
+    private http: HttpClient,
+    private coreUtil: CoreUtil) {
+      
+    }
 
   fetch(): Observable<HttpResponse<Account>> {
     return this.http.get<Account>(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, { observe: 'response' });
@@ -81,11 +87,14 @@ export class AccountService {
         const account = response.body;
         if (account) {
           this.userIdentity = account;
+          this.localStorage.store('userIdentity',JSON.stringify(this.userIdentity)) || 
+          this.sessionStorage.store('userIdentity',JSON.stringify(this.userIdentity))
+
           this.authenticated = true;
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
 
-          const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
+          const langKey = this.localStorage.retrieve('locale') || this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
           // this.languageService.changeLanguage(langKey);
         } else {
           this.userIdentity = null;
