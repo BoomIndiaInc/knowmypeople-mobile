@@ -4,5 +4,5 @@ export interface Pages {
     direct?: string;
     icon?: string;
     active?: boolean;
-    permissions?: string[];
+    authorities?: string[];
 }

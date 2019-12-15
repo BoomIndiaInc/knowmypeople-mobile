@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,18 +23,24 @@ import { SearchFilterPageModule } from './pages/modal/search-filter/search-filte
 
 // Components
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { AuthServerProvider } from './services/auth/auth-jwt.service';
+import { JwtModule } from '@auth0/angular-jwt';
+import { ApplicationPreStartupService } from './services/hook/application-pre-startup.service';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+//
+// Hook that pre-initializes the application
+//
+export function preStartupHandler(applicationPreStartupService: ApplicationPreStartupService) {
+  return applicationPreStartupService.preStartupHook();
+}
 @NgModule({
   declarations: [AppComponent, NotificationsComponent],
   entryComponents: [NotificationsComponent],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -42,14 +48,32 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: function tokenGetter() {
+          return localStorage.getItem('access_token');
+        },
+        whitelistedDomains: ['localhost:8100'],
+        blacklistedRoutes: ['http://localhost:8100/auth/login']
+      }
+    }),
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     IonicModule.forRoot(),
-    NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
+    NgxWebstorageModule.forRoot({ prefix: 'kmp', separator: '-' }),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     ImagePageModule,
     SearchFilterPageModule
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: preStartupHandler,
+      deps: [ApplicationPreStartupService],
+      multi: true
+    },
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -62,7 +86,8 @@ export function createTranslateLoader(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
       multi: true
-    }
+    },
+    AuthServerProvider
   ],
   bootstrap: [AppComponent]
 })

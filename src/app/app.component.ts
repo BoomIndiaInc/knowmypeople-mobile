@@ -6,8 +6,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Pages } from './interfaces/pages';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { AppService } from './services/app/app.service';
-import { DEFAULT_APP_CONFIG } from './shared/util/constant-util';
-import { ComponentUtil } from './shared/util/component-util';
+import { ComponentUtil } from './shared';
+import { AuthServerProvider } from './services/auth/auth-jwt.service';
+import { AccountService } from './services/auth/account.service';
+import { PropertyResolverService } from './services/property-resolver/property-resolver.service';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +17,13 @@ import { ComponentUtil } from './shared/util/component-util';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public appPages: Array<Pages>;
-  version  = '0.0.0';
+  appPages: Array<Pages>;
+  version = '0.0.0';
   loading: any;
   appConfigErrorString: string;
   appConfigLoadingMessageString: string;
+  userAuthenticated: boolean;
+  userAuthorities: Array<string>;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -27,8 +31,11 @@ export class AppComponent {
     private translate: TranslateService,
     private navCtrl: NavController,
     private router: Router,
-    private  appService: AppService,
-    private componentUtil: ComponentUtil
+    private appService: AppService,
+    private componentUtil: ComponentUtil,
+    public authServerProvider: AuthServerProvider,
+    private accountService: AccountService,
+    private resolverService: PropertyResolverService
   ) {
     this.init();
   }
@@ -40,10 +47,20 @@ export class AppComponent {
       this.appConfigLoadingMessageString = values.LOADING_APPLICATION_CONFIGURATION;
     });
 
-    this.componentUtil.showLoading('Please wait...', ()=>{
-      this.getAppConfig();
-    }, ()=>{
-      this.splashScreen.hide();
+    this.componentUtil.showLoading(
+      'Please wait...',
+      () => {
+        this.getAppConfig();
+      },
+      () => {
+        this.splashScreen.hide();
+      }
+    );
+    this.accountService.getAuthenticationState().subscribe((user: any) => {
+      if(user) {
+        this.userAuthenticated = true;
+        this.userAuthorities = user.authorities;
+      }
     })
   }
 
@@ -56,27 +73,30 @@ export class AppComponent {
         // Unable to fetch app configurations
         // const error = JSON.parse(response.error);
         console.log(response.error);
-        this.componentUtil.showToast(this.appConfigErrorString ,{cssClass : 'toast', duration: 5000, showCloseButton: true});
-        this.initializeApp(DEFAULT_APP_CONFIG);
+        this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000, showCloseButton: true });
+        this.initializeApp();
       }
     );
   }
-  initializeApp(appConfig) {
+  initializeApp(appConfig = this.resolverService.allProperties) {
     this.appPages = appConfig.menus;
     this.version = appConfig.version;
-    
+
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        this.appPages.map( p => {
-          return p.active = (event.url === p.url);
+        this.appPages.map(p => {
+          return (p.active = event.url === p.url);
         });
       }
     });
 
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.componentUtil.hideLoading();
-    }).catch(() => {});
+    this.platform
+      .ready()
+      .then(() => {
+        this.statusBar.styleDefault();
+        this.componentUtil.hideLoading();
+      })
+      .catch(() => {});
   }
 
   initTranslate() {
@@ -102,16 +122,31 @@ export class AppComponent {
   }
 
   logout() {
-    this.navCtrl.navigateRoot('/');
+    this.componentUtil.userLogout();
   }
 
-  leaveAReview() { }
+  leaveAReview() {}
 
-    openFacebookProfile() { }
+  openFacebookProfile() {}
 
-    openInstagramProfile() { }
+  openInstagramProfile() {}
 
-    openTwitterProfile() { }
+  openTwitterProfile() {}
 
-    openWebsite() { }
+  openWebsite() {}
+
+  openWhatsAppProfile() {}
+
+  showMenu(page: Pages): boolean {
+    let showMenu = true;
+    if(page.authorities && page.authorities.length>0){
+      showMenu = this.accountService.hasAnyAuthorityDirect(page.authorities);
+    }
+
+    return showMenu
+  }
+
+  // userAuthenticated() {
+  //   return this.accountService.isAuthenticated() && this.authServerProvider.hasValidToken();
+  // }
 }
