@@ -2,34 +2,34 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
-import { Account } from 'src/model/account.model';
 import { ApiService } from '../api/api.service';
 import { USER_ACCOUNT_REST_API_URL, USER_DETAILS_REST_API_URL } from './../../shared/util/service-util';
 import { CoreUtil } from 'src/app/shared/util/core-util';
-import { User } from '../user/user.model';
+import { User } from './../../../model/user.model';
+import { AccountService } from '../auth/account.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
-  private userIdentity: Account;
+export class KmpUserService {
+  private userIdentity: User;
   private authenticated = false;
   private authenticationState = new Subject<any>();
-  private user: User;
   
   constructor(private localStorage: LocalStorageService, 
     private sessionStorage: SessionStorageService, 
     private http: HttpClient,
-    private coreUtil: CoreUtil) {
+    private coreUtil: CoreUtil,
+    private accountService: AccountService) {
       
     }
 
-  fetch(): Observable<HttpResponse<Account>> {
-    return this.http.get<Account>(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, { observe: 'response' });
+  fetch(username: string = this.accountService.getUsername()): Observable<HttpResponse<User>> {
+    return this.http.get<User>(ApiService.API_URL + USER_DETAILS_REST_API_URL+'?loginId='+username, { observe: 'response' });
   }
 
-  save(account: any): Observable<HttpResponse<any>> {
-    return this.http.post(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, account, { observe: 'response' });
+  save(user: User): Observable<HttpResponse<any>> {
+    return this.http.post(ApiService.API_URL + USER_ACCOUNT_REST_API_URL, user, { observe: 'response' });
   }
 
   authenticate(identity) {
@@ -83,20 +83,20 @@ export class AccountService {
     }
 
     // retrieve the userIdentity data from the server, update the identity object, and then resolve.
-    return this.fetch()
+    return this.fetch(this.accountService.getUsername())
       .toPromise()
       .then(response => {
-        const account = response.body;
-        if (account) {
-          this.userIdentity = account;
-          this.localStorage.store('userIdentity',JSON.stringify(this.userIdentity)) || 
-          this.sessionStorage.store('userIdentity',JSON.stringify(this.userIdentity))
+        const user = response.body;
+        if (user) {
+          this.userIdentity = user;
+          this.localStorage.store('kmpUserIdentity',JSON.stringify(this.userIdentity)) || 
+          this.sessionStorage.store('kmpUserIdentity',JSON.stringify(this.userIdentity))
 
           this.authenticated = true;
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
 
-          const langKey = this.localStorage.retrieve('locale') || this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
+          // const langKey = this.localStorage.retrieve('locale') || this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
           // this.languageService.changeLanguage(langKey);
         } else {
           this.userIdentity = null;
@@ -128,12 +128,22 @@ export class AccountService {
   getImageUrl(): string {
     return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
   }
-  getUsername(): string {
-    return this.isIdentityResolved() ? this.userIdentity.login : null;
+  
+  getUserId(): string {
+    return this.isIdentityResolved() ? this.userIdentity.userId : null;
   }
 
-  getLangKey(): string {
-    return this.isIdentityResolved() ? this.userIdentity.langKey : null;
+  getUserType(): string {
+    return this.isIdentityResolved() ? this.userIdentity.agentType : null;
+  }
+
+  getBoothId(): string {
+    return this.isIdentityResolved() ? this.userIdentity.boothId : null;
+  }
+
+  getElectionType(): string {
+    return this.isIdentityResolved() ? this.userIdentity.electionType : null;
   }
 
 }
+

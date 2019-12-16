@@ -1,4 +1,5 @@
-export interface Pages {
+export interface Page {
+    id: string;
     title: string;
     url: any;
     direct?: string;

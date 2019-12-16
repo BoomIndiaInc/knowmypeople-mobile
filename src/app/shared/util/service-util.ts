@@ -4,3 +4,7 @@ export const USER_AUTHENTICATE_REST_API_URL = "/authenticate";
 export const RESET_PASSWORD_REST_API_URL = "account/reset-password/init";
 export const USERS_REST_API_URL = "users";
 export const REGISTER_REST_API_URL = "register";
+export const USER_DETAILS_REST_API_URL = "/AgentDisplayInfoByLoginId";
+export const BOOTHS_REST_API_URL = "/fetchAllBooths";
+export const ELECTION_TYPE_REST_API_URL = "/fetchAllElectionType";
+export const WARDS_REST_API_URL = "/fetchAllWards";

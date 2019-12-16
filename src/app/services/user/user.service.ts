@@ -3,7 +3,8 @@ import { Observable, of, throwError } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { LoginService } from '../login/login.service';
-import { USERS_REST_API_URL, RESET_PASSWORD_REST_API_URL, REGISTER_REST_API_URL } from './../../shared/util/service-util'; 
+import { USERS_REST_API_URL, RESET_PASSWORD_REST_API_URL, REGISTER_REST_API_URL } from './../../shared/util/service-util';
+import { NetworkService } from '../network/network.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { USERS_REST_API_URL, RESET_PASSWORD_REST_API_URL, REGISTER_REST_API_URL 
 export class UserService {
   private user: any;
 
-  constructor(public apiService: ApiService, public loginService: LoginService) {}
+  constructor(public apiService: ApiService, public loginService: LoginService, public networkService: NetworkService) {}
 
   /**
    * Send a POST request to our login endpoint with the data
@@ -35,14 +36,20 @@ export class UserService {
   }
 
   forgotPassword(email: string) {
+    if (!this.networkService.isOnline()) {
+      return this.networkService.throwNetworkError();
+    }
     return this.apiService.post(RESET_PASSWORD_REST_API_URL, email, { responseType: 'text' as 'text' }).pipe(share());
   }
-  
+
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
    */
   signup(accountInfo: any) {
+    if (!this.networkService.isOnline()) {
+      return this.networkService.throwNetworkError();
+    }
     return this.apiService.post(REGISTER_REST_API_URL, accountInfo, { responseType: 'text' as 'text' }).pipe(share());
   }
 

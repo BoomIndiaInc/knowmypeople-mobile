@@ -3,7 +3,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Pages } from './interfaces/pages';
+import { Page } from './interfaces/pages';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { AppService } from './services/app/app.service';
 import { ComponentUtil, DEFAULT_APP_CONFIG } from './shared';
@@ -12,6 +12,8 @@ import { AccountService } from './services/auth/account.service';
 import { PropertyResolverService } from './services/property-resolver/property-resolver.service';
 import { NetworkService } from './services/network/network.service';
 import { InAppBrowserService } from './services/in-app-browser/in-app-browser.service';
+import { KmpUserService } from './services/kmp/user.service';
+import { User } from 'src/model/user.model';
 
 @Component({
   selector: 'app-root',
@@ -19,15 +21,14 @@ import { InAppBrowserService } from './services/in-app-browser/in-app-browser.se
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  appPages: Array<Pages>;
+  appPages: Array<Page>;
   version = '0.0.0';
-  loading: any;
   appConfigErrorString: string;
   appConfigLoadingMessageString: string;
   userAuthenticated: boolean;
   userAuthorities: Array<string>;
   userName: string;
-  userEmail: string;
+  userType: string;
   userImageUrl: string;
 
   constructor(
@@ -41,6 +42,7 @@ export class AppComponent {
     private componentUtil: ComponentUtil,
     public authServerProvider: AuthServerProvider,
     private accountService: AccountService,
+    private kmpUserService: KmpUserService,
     private resolverService: PropertyResolverService,
     private networkService: NetworkService,
     private inAppBroswserService: InAppBrowserService
@@ -67,21 +69,31 @@ export class AppComponent {
     });
 
     this.componentUtil.showLoading(
-      'Please wait...',
       () => {
         this.getAppConfig();
       },
+      'PLEASE_WAIT',
       () => {
         this.splashScreen.hide();
       }
     );
     this.accountService.getAuthenticationState().subscribe((user: any) => {
       if (user) {
-        this.userAuthenticated = true;
-        this.userAuthorities = user.authorities;
-        this.userName = user.login;
-        this.userEmail = user.email;
+        // this.userAuthenticated = true;
+        // this.userAuthorities = user.authorities;
+        // this.userName = user.login;
+        // this.userEmail = user.email;
         this.userImageUrl = user.imageUrl;
+      }
+    });
+
+    this.kmpUserService.getAuthenticationState().subscribe((kmpUser: User) => {
+      if (kmpUser) {
+        this.userAuthenticated = true;
+        this.userAuthorities = kmpUser.authorities;
+        this.userName = kmpUser.userId;
+        this.userType = kmpUser.agentType;
+        // this.userImageUrl = user.imageUrl;
       }
     });
   }
@@ -89,17 +101,19 @@ export class AppComponent {
   getAppConfig() {
     this.appService.appConfig().subscribe(
       response => {
+        this.resolverService.allProperties = response;
         this.initializeApp(response);
       },
       async response => {
         // Unable to fetch app configurations
         // const error = JSON.parse(response.error);
         console.log(response.error);
-        this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000, showCloseButton: true });
+        this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000});
         this.initializeApp(this.resolverService.allProperties);
       }
     );
   }
+
   initializeApp(appConfig = DEFAULT_APP_CONFIG) {
     this.appPages = appConfig.menus;
     this.version = appConfig.version;
@@ -122,7 +136,7 @@ export class AppComponent {
   }
 
   initTranslate() {
-    const enLang = 'en';
+    const enLang = this.resolverService.getPropertyValue('default-lang');
 
     // Set the default language for translation strings, and the current language.
     this.translate.setDefaultLang(enLang);
@@ -147,7 +161,7 @@ export class AppComponent {
     console.log(' Leave a Review :: Open App Store link. - Work in Progress')
   }
 
-  showMenu(page: Pages): boolean {
+  showMenu(page: Page): boolean {
     let showMenu = true;
     if (page.authorities && page.authorities.length > 0) {
       showMenu = this.accountService.hasAnyAuthorityDirect(page.authorities);

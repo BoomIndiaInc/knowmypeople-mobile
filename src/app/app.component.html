@@ -18,7 +18,7 @@
               </ion-text>
               <ion-text color="secondary">
                 <h3>
-                  {{userEmail}}
+                  {{userType | translate}}
                 </h3>
               </ion-text>
               <ion-menu-toggle class="mto" auto-hide="false">
@@ -45,8 +45,8 @@
       <ion-content class="bg-profile">
         <ion-list>
           <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
-            <ion-item *ngIf="showMenu(page)" [routerLink]="page.url" [class.active-item]="page.active"
-              routerDirection="root" color="primary">
+            <ion-item *ngIf="showMenu(page)" [routerLink]="[page.url]" [class.active-item]="page.active"
+              routerDirection="root" color="primary" >
               <ion-icon slot="start" [name]="page.icon" color="light"></ion-icon>
               <ion-label>
                 {{page.title | translate}}

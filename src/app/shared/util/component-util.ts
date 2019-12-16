@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { AuthServerProvider } from 'src/app/services/auth/auth-jwt.service';
 import { AccountService } from 'src/app/services/auth/account.service';
+import { FormGroup } from '@angular/forms';
+import { Page } from 'src/app/interfaces/pages';
+import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export const SLIDE_FADE_OPTIONS = {
   on: {
@@ -65,6 +69,25 @@ export const SLIDE_FADE_OPTIONS = {
   }
 };
 
+// custom validator to check that two fields match
+export function MustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+          // return if another validator has already found an error on the matchingControl
+          return;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+          matchingControl.setErrors({ mustMatch: true });
+      } else {
+          matchingControl.setErrors(null);
+      }
+  }
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -75,21 +98,24 @@ export class ComponentUtil {
     public toastController: ToastController,
     private navCtrl: NavController,
     private authService: AuthServerProvider,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private resolveService: PropertyResolverService,
+    private translateService: TranslateService
   ) {}
 
-  showLoading(message, completeCallBack, dismissCallBack) {
+  showLoading(completeCallBack, message?, dismissCallBack?) {
     if (this.loading) return;
+    const translatedMessage = (!!message) ? this.translateService.instant(message) : this.translateService.instant('PLEASE_WAIT');
     this.loadingCtrl
       .create({
-        message: message
+        message: translatedMessage
       })
       .then(loading => {
         this.loading = loading;
         this.loading.present();
-        completeCallBack();
+        if(completeCallBack) return completeCallBack();
         this.loading.onDidDismiss().then(dis => {
-          dismissCallBack();
+          if(dismissCallBack) return dismissCallBack();
         });
       });
   }
@@ -107,8 +133,8 @@ export class ComponentUtil {
       duration: options && options.duration ? options.duration : 3000,
       position: options && options.position ? options.position : 'top',
       cssClass: options && options.cssClass ? options.cssClass : 'toast',
-      showCloseButton: options && options.showCloseButton ? options.showCloseButton : false,
-      closeButtonText: options && options.closeButtonText ? options.closeButtonText : 'OK',
+      showCloseButton: options && options.showCloseButton ? options.showCloseButton : true,
+      closeButtonText: options && options.closeButtonText ? options.closeButtonText : 'OK'
       // dismissOnPageChange: options && options.dismissOnPageChange ? options.dismissOnPageChange : false
       // color:  (options && options.color) ? options.color : 'primary'
     });
@@ -125,4 +151,11 @@ export class ComponentUtil {
       }
     );
   }
+
+  getMenuById(menuId: string ): Page {
+    const menus:Page[]  = this.resolveService.getPropertyValue('menus');
+    const filteredMenu: Page[]  = menus.filter((menu :Page) => menu.id === menuId);
+    return (filteredMenu && filteredMenu.length>0) ? filteredMenu[0] : null;
+  }
+
 }

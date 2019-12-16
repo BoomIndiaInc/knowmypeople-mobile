@@ -43,9 +43,9 @@ export class PropertyResolverService {
    */
   public getPropertyValue(
     lookupKey: string,
-    @Optional() defaultValue?: string
-  ): string {
-    let value: string;
+    @Optional() defaultValue?: any
+  ): any {
+    let value: any;
     try {
       // Use the given key to find the JSON entry and return the value. if
       // the property is not found and a default value was specified, return the default value.

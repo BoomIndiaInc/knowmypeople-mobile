@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
-import { Subscription } from 'rxjs';
+import { Subscription, throwError } from 'rxjs';
 import { CoreUtil } from 'src/app/shared/util/core-util';
 
 @Injectable({
@@ -54,6 +54,15 @@ export class NetworkService {
 
   getNetworkType() {
     return this.network.type;
+  }
+
+  throwNetworkError() {
+    const errorResponse = {
+      error: JSON.stringify({
+        message: 'error.network'
+      })
+    };
+    return throwError(errorResponse);
   }
 
 }

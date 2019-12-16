@@ -8,11 +8,14 @@
     "ROLE_DIST"
   ],
   "mode": "qe",
+  "default-menu-id":"settings",
+  "default-lang": "en",
   "menus": [
     {
-      "title": "Voters",
+      "id": "voters",
+      "title": "VOTERS",
       "url": "/voters",
-      "direct": "root",
+      "direct": "forward",
       "icon": "people",
       "active": false,
       "authorities": [
@@ -21,7 +24,8 @@
       ]
     },
     {
-      "title": "About",
+      "id": "about",
+      "title": "ABOUT_US",
       "url": "/about",
       "direct": "forward",
       "icon": "information-circle-outline",
@@ -32,9 +36,10 @@
       ]
     },
     {
-      "title": "Settings",
+      "id": "settings",
+      "title": "SETTINGS",
       "url": "/settings",
-      "direct": "forward",
+      "direct": "root",
       "icon": "cog",
       "active": false,
       "authorities": [

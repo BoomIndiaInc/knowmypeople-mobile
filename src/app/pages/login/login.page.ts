@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { LoginService } from 'src/app/services/login/login.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
-import { SLIDE_FADE_OPTIONS } from './../../shared/util/component-util';
+import { SLIDE_FADE_OPTIONS, ComponentUtil } from './../../shared/util/component-util';
 import { LOGIN_BACKGROUNDS } from './../../shared/util/constant-util';
 import { AccountService } from 'src/app/services/auth/account.service';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { NavigationExtras } from '@angular/router';
+import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
+import { Page } from 'src/app/interfaces/pages';
+import { KmpUserService } from 'src/app/services/kmp/user.service';
 
 @Component({
   selector: 'app-login',
@@ -26,16 +30,18 @@ export class LoginPage implements OnInit {
   constructor(
     public translateService: TranslateService,
     public loginService: LoginService,
-    public toastController: ToastController,
     public navController: NavController,
     public formBuilder: FormBuilder,
     public accountService: AccountService,
     private localStorage: LocalStorageService,
-    private sessionStorage: SessionStorageService
+    private sessionStorage: SessionStorageService,
+    private componentUtil: ComponentUtil,
+    private resolveService: PropertyResolverService,
+    private kmpUserService: KmpUserService
   ) {
     this.loginForm = formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.compose([Validators.minLength(5), Validators.required])],
+      username: ['test', Validators.required],
+      password: ['test', Validators.compose([Validators.minLength(4), Validators.required])],
       rememberMe: [true, Validators.required]
     });
   }
@@ -53,43 +59,45 @@ export class LoginPage implements OnInit {
     slides.startAutoplay();
   }
 
-  doLogin() {
-    this.onlineLogin();
+  onLogin() {
+    this.componentUtil.showLoading(()=>{
+      this.loginService.login(this.loginForm.value).then(
+        () => {
+          this.kmpUserService.identity(true).then(kmpUser => {
+            this.componentUtil.hideLoading();
+            // After the login the language will be changed to
+            // the language selected by the user during his registration
+            if (kmpUser !== null) {
+              this.goToHome();
+            }else{
+              this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true });
+              this.componentUtil.userLogout();
+            }
+          });
+        },
+        async err => {
+          
+          // Unable to log in
+          this.loginForm.patchValue({
+            password: ''
+          });
+          this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true });
+          this.componentUtil.hideLoading();
+        }
+      );
+    });
+    
   }
-  onOpenForgotPassword() {}
-  onOpenSignup() {}
 
   goToHome() {
-    this.navController.navigateRoot('/voters');
-  }
-
-  onlineLogin() {
-    this.loginService.login(this.loginForm.value).then(
-      () => {
-        this.goToHome();
-      },
-      async err => {
-        // Unable to log in
-        this.loginForm.patchValue({
-          password: ''
-        });
-        const toast = await this.toastController.create({
-          message: this.loginErrorString,
-          duration: 3000,
-          position: 'top'
-        });
-        toast.present();
-      }
-    );
-  }
-  offlineLogin() {
-    const localStorageUserIdentity = JSON.parse(this.localStorage.retrieve('userIdentity'));
-    const sessionStorageUserIdentity = JSON.parse(this.sessionStorage.retrieve('userIdentity'));
-    if (localStorageUserIdentity) {
-      this.accountService.authenticate(localStorageUserIdentity);
-    } else if (sessionStorageUserIdentity) {
-      this.accountService.authenticate(sessionStorageUserIdentity);
-    }
-    this.goToHome();
+    const defaultMenuId = this.resolveService.getPropertyValue('default-menu-id');
+    const menu: Page = this.componentUtil.getMenuById(defaultMenuId);
+    // let navigationExtras: NavigationExtras = {
+    //   queryParams: {
+    //     menuId: menu.id
+    //   },
+    //   queryParamsHandling: 'merge'
+    // };
+    this.navController.navigateRoot(menu.url);
   }
 }
