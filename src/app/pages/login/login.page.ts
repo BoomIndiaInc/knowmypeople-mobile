@@ -8,6 +8,7 @@ import { SLIDE_FADE_OPTIONS } from './../../shared/util/component-util';
 import { LOGIN_BACKGROUNDS } from './../../shared/util/constant-util';
 import { AccountService } from 'src/app/services/auth/account.service';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',

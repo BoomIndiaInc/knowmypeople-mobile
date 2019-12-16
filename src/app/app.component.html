@@ -6,29 +6,33 @@
 
           <ion-item>
             <ion-avatar slot="start" class="user-avatar">
-              <img src="assets/img/avatar.png">
+              <img *ngIf="userImageUrl; else defaultUserIcon" class="user-image" [src]="'assets/img/avatar.png'">
+
+              <ng-template #defaultUserIcon>
+                  <ion-icon name="contact"></ion-icon>
+                </ng-template>
             </ion-avatar>
             <ion-label margin-bottom>
               <ion-text color="light">
-                <h1><strong>Sathiyendren Rajendren</strong></h1>
+                <h1 style="text-transform: capitalize"><strong>{{userName}}</strong></h1>
               </ion-text>
               <ion-text color="secondary">
                 <h3>
-                  Bangalore, India
+                  {{userEmail}}
                 </h3>
               </ion-text>
               <ion-menu-toggle class="mto" auto-hide="false">
                 <a class="text08" tappable (click)="goToEditProgile()">
                   <ion-text color="light">
                     <ion-icon name="contact"></ion-icon>
-                    <strong>edit profile</strong>
+                    <strong>{{'SETTINGS_PAGE_PROFILE'| translate}}</strong>
                   </ion-text>
                 </a>
                 <ion-text color="secondary"> | </ion-text>
                 <a class="text08" tappable (click)="logout()">
                   <ion-text color="light">
                     <ion-icon name="log-out"></ion-icon>
-                    <strong>logout</strong>
+                    <strong>{{'LOGOUT_TITLE'| translate}}</strong>
                   </ion-text>
                 </a>
               </ion-menu-toggle>
@@ -56,7 +60,7 @@
       <div class="footer">
         <div class="footer-nav">
           <ul>
-            <li (click)="leaveAReview()">Like this app? Leave a review!</li>
+            <li (click)="leaveAReview()">{{'REVIEW_QUESTION'| translate }}</li>
           </ul>
         </div>
 

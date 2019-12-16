@@ -1,52 +1,68 @@
 {
-    "name": "Know My People",
-    "organization": "KnowMyPeople",
-    "version": "0.0.1",
-    "authorities": ["ROLE_ADMIN", "ROLE_AGENT", "ROLE_DIST"],
-    "mode":"qe",
-    "menus": [
-      {
-        "title": "Voters",
-        "url": "/voters",
-        "direct": "root",
-        "icon": "people",
-        "active": false,
-        "authorities": ["ROLE_ADMIN", "ROLE_AGENT"]
-      },
-      {
-        "title": "About",
-        "url": "/about",
-        "direct": "forward",
-        "icon": "information-circle-outline",
-        "active": false,
-        "authorities": ["ROLE_ADMIN", "ROLE_AGENT"]
-      },
-  
-      {
-        "title": "Settings",
-        "url": "/settings",
-        "direct": "forward",
-        "icon": "cog",
-        "active": false,
-        "authorities": ["ROLE_ADMIN", "ROLE_AGENT"]
-      }
-    ],
-    "servers": {
-      "prod": "https://knowmypeople.com",
-      "qe": "https://knowmypeople.com",
-      "dev": "http://localhost"
+  "name": "Know My People",
+  "organization": "KnowMyPeople",
+  "version": "0.0.1",
+  "authorities": [
+    "ROLE_ADMIN",
+    "ROLE_AGENT",
+    "ROLE_DIST"
+  ],
+  "mode": "qe",
+  "menus": [
+    {
+      "title": "Voters",
+      "url": "/voters",
+      "direct": "root",
+      "icon": "people",
+      "active": false,
+      "authorities": [
+        "ROLE_ADMIN",
+        "ROLE_AGENT"
+      ]
     },
-    "links": {
-      "instagram": "https://www.instagram.com/",
-      "facebook": "https://www.facebook.com/",
-      "twitter": "https://twitter.com/",
-      "website": "https://knowmypeople.com/",
-      "whatsapp": "https://www.whatsapp.com/"
+    {
+      "title": "About",
+      "url": "/about",
+      "direct": "forward",
+      "icon": "information-circle-outline",
+      "active": false,
+      "authorities": [
+        "ROLE_ADMIN",
+        "ROLE_AGENT"
+      ]
     },
-    "about": {
-  
-    },
-    "privacy": {
-      
+    {
+      "title": "Settings",
+      "url": "/settings",
+      "direct": "forward",
+      "icon": "cog",
+      "active": false,
+      "authorities": [
+        "ROLE_ADMIN",
+        "ROLE_AGENT"
+      ]
     }
-  }
+  ],
+  "servers": {
+    "prod": "https://knowmypeople.com",
+    "qe": "https://knowmypeople.com",
+    "dev": "http://localhost"
+  },
+  "links": {
+    "instagram": "https://www.instagram.com/",
+    "facebook": "https://www.facebook.com/",
+    "twitter": "https://twitter.com/",
+    "website": "https://knowmypeople.com/",
+    "whatsapp": "https://www.whatsapp.com/"
+  },
+  "about": {
+    "title": "Know My App",
+    "image": "assets/img/ionic4start-ico.png",
+    "contents": [
+        "The New Android Mobile App called 'Know My People' App provides estimated Voter's turnout in the real-time basis for every Citizen. Earlier, this used to be announced at the end of the Poll.",
+        "The Election Commission of India for the first has launched a new application for giving live information to everybody about the estimated voter turnout during the poll. The application captures the real-time information from the data inputted by the Returning Officers and calculates the estimated totals and displays in the user-friendly android mobile application. The application is called as ‘Voter Turnout’ application.",
+        "The application is designed to show the Estimated Voter Turnout for each State which can further be drilled down to Parliamentary"
+    ]
+  },
+  "privacy": {}
+}

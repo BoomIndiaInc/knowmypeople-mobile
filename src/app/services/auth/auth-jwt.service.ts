@@ -25,6 +25,9 @@ export class AuthServerProvider {
       rememberMe: credentials.rememberMe
     };
 
+    this.localStorage.store('credentials',JSON.stringify(data)) || 
+          this.sessionStorage.store('credentials',JSON.stringify(data))
+
     return this.http.post(ApiService.API_URL + USER_AUTHENTICATE_REST_API_URL, data, { observe: 'response' }).pipe(map(authenticateSuccess.bind(this)));
 
     function authenticateSuccess(resp) {

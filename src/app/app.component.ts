@@ -11,6 +11,7 @@ import { AuthServerProvider } from './services/auth/auth-jwt.service';
 import { AccountService } from './services/auth/account.service';
 import { PropertyResolverService } from './services/property-resolver/property-resolver.service';
 import { NetworkService } from './services/network/network.service';
+import { InAppBrowserService } from './services/in-app-browser/in-app-browser.service';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,10 @@ export class AppComponent {
   appConfigLoadingMessageString: string;
   userAuthenticated: boolean;
   userAuthorities: Array<string>;
+  userName: string;
+  userEmail: string;
+  userImageUrl: string;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -37,15 +42,21 @@ export class AppComponent {
     public authServerProvider: AuthServerProvider,
     private accountService: AccountService,
     private resolverService: PropertyResolverService,
-    private networkService: NetworkService
+    private networkService: NetworkService,
+    private inAppBroswserService: InAppBrowserService
   ) {
     this.init();
   }
   /**
    * Called when this component is being initialized.
    */
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
+  /**
+   * Use this to clean up any subscriptions etc.
+   */
+  ngOnDestroy(): void {
+    this.networkService.unsubscribe();
   }
 
   init() {
@@ -65,11 +76,14 @@ export class AppComponent {
       }
     );
     this.accountService.getAuthenticationState().subscribe((user: any) => {
-      if(user) {
+      if (user) {
         this.userAuthenticated = true;
         this.userAuthorities = user.authorities;
+        this.userName = user.login;
+        this.userEmail = user.email;
+        this.userImageUrl = user.imageUrl;
       }
-    })
+    });
   }
 
   getAppConfig() {
@@ -119,10 +133,6 @@ export class AppComponent {
       this.translate.use(enLang); // Set your language here
     }
 
-    // this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
-    //   // this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
-    //   console.log(values);
-    // });
   }
 
   goToEditProgile() {
@@ -133,31 +143,40 @@ export class AppComponent {
     this.componentUtil.userLogout();
   }
 
-  leaveAReview() {}
-
-  openFacebookProfile() {}
-
-  openInstagramProfile() {}
-
-  openTwitterProfile() {}
-
-  openWebsite() {}
-
-  openWhatsAppProfile() {}
+  leaveAReview() {
+    console.log(' Leave a Review :: Open App Store link. - Work in Progress')
+  }
 
   showMenu(page: Pages): boolean {
     let showMenu = true;
-    if(page.authorities && page.authorities.length>0){
+    if (page.authorities && page.authorities.length > 0) {
       showMenu = this.accountService.hasAnyAuthorityDirect(page.authorities);
     }
 
-    return showMenu
+    return showMenu;
   }
 
-  /**
-   * Use this to clean up any subscriptions etc.
-   */
-  ngOnDestroy(): void {
-    this.networkService.unsubscribe();
+  openLink(socialMedia) {
+    const fbLink = this.resolverService.getPropertyValue('links')[socialMedia]
+    this.inAppBroswserService.openWithSystemBrowser(fbLink);
+  }
+  openFacebookProfile(socialMedia = 'facebook') {
+    this.openLink(socialMedia);
+  }
+
+  openInstagramProfile(socialMedia = 'instagram') {
+    this.openLink(socialMedia);
+  }
+
+  openTwitterProfile(socialMedia = 'twitter') {
+    this.openLink(socialMedia);
+  }
+
+  openWebsite(socialMedia = 'website') {
+    this.openLink(socialMedia);
+  }
+
+  openWhatsAppProfile(socialMedia = 'whatsapp') {
+    this.openLink(socialMedia);
   }
 }

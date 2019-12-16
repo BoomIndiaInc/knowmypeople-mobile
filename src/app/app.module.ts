@@ -27,6 +27,7 @@ import { AuthServerProvider } from './services/auth/auth-jwt.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ApplicationPreStartupService } from './services/hook/application-pre-startup.service';
 import { Network } from '@ionic-native/network/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -77,6 +78,7 @@ export function preStartupHandler(applicationPreStartupService: ApplicationPreSt
     },
     StatusBar,
     SplashScreen,
+    InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
