@@ -9,9 +9,10 @@ import { KmpUserService } from 'src/app/services/kmp/user.service';
 import { User } from 'src/model/user.model';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
-import { combineLatest, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { KmpService } from 'src/app/services/kmp/kmp.service';
-import { map } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 
 @Component({
   selector: 'app-settings',
@@ -29,12 +30,13 @@ export class SettingsPage implements OnInit {
   enableAutoSync: any;
   enableOfflineSupport: any;
   language: any;
+  nullValue: string = null;
+  public settingsForm: FormGroup;
 
   languages: any = ['en'];
   booths: any = [];
   wards: any = [];
   electionTypes: any = [];
-  values$;
 
   constructor(
     public navCtrl: NavController,
@@ -47,13 +49,36 @@ export class SettingsPage implements OnInit {
     private kmpService: KmpService,
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService,
-    private resolverService: PropertyResolverService
+    private resolverService: PropertyResolverService,
+    public formBuilder: FormBuilder,
+    public syncDataService: SyncDataService
   ) {
     const menuId = 'settings';
     console.log(menuId);
     if (!!menuId) {
       this.pageMenu = this.componentUtil.getMenuById(menuId);
     }
+    if (this.resolverService.getPropertyValue('supported-languages')) {
+      this.languages = this.resolverService.getPropertyValue('supported-languages');
+    }
+
+    this.userName = this.kmpUserService.getUserId();
+    this.userType = this.kmpUserService.getUserType();
+    this.userImageUrl = this.accountService.getImageUrl();
+    this.userBoothId = this.kmpUserService.getBoothId();
+    this.userElectionType = this.kmpUserService.getElectionType();
+    this.userWardId = this.kmpUserService.getWardId();
+    this.language = this.kmpUserService.getLanguage() || this.resolverService.getPropertyValue('default-lang');
+    this.enableAutoSync = !!this.kmpUserService.getAutoSync();
+
+    this.settingsForm = formBuilder.group({
+      imageUrl: [this.userImageUrl],
+      language: [this.language],
+      autoSync: [this.enableAutoSync],
+      boothId: [this.userBoothId],
+      wardId: [this.userWardId],
+      electionType: [this.userElectionType]
+    });
   }
 
   ngOnInit() {
@@ -62,32 +87,16 @@ export class SettingsPage implements OnInit {
     });
   }
   init() {
-    this.userName = this.kmpUserService.getUserId();
-    this.userType = this.kmpUserService.getUserType();
-    this.userImageUrl = this.accountService.getImageUrl();
-    this.userBoothId = this.kmpUserService.getBoothId();
-    this.userElectionType = this.kmpUserService.getElectionType();
-    this.userWardId = this.localStorage.retrieve('kmpWardId') || this.sessionStorage.retrieve('kmpWardId');
-    this.language = this.accountService.getLangKey() || this.resolverService.getPropertyValue('default-lang');
-    this.enableAutoSync = this.localStorage.retrieve('enableAutoSync') || this.sessionStorage.retrieve('enableAutoSync');
-    this.accountService.getAuthenticationState().subscribe((user: any) => {
-      if (user) {
-        // this.userAuthenticated = true;
-        // this.userAuthorities = user.authorities;
-        // this.userName = user.login;
-        // this.userEmail = user.email;
-        this.userImageUrl = user.imageUrl;
-        this.language = user.langKey;
-      }
-    });
-
     this.kmpUserService.getAuthenticationState().subscribe((kmpUser: User) => {
       if (kmpUser) {
         this.userName = kmpUser.userId;
         this.userType = kmpUser.agentType;
-        // this.userImageUrl = user.imageUrl;
+        this.userImageUrl = kmpUser.imageUrl;
         this.userBoothId = kmpUser.boothId;
         this.userElectionType = kmpUser.electionType;
+        this.userWardId = kmpUser.wardId;
+        this.language = kmpUser.language;
+        this.enableAutoSync = kmpUser.autoSync;
       }
     });
 
@@ -102,31 +111,58 @@ export class SettingsPage implements OnInit {
   }
 
   electionTypeSelected(event) {
-    console.log('electionTypeSelected');
+    console.log('electionType Selected');
+    this.updateUserPreference();
   }
 
   languageSelected(event) {
-    console.log('languageSelected');
+    console.log('language Selected');
+    this.updateUserPreference();
   }
 
   boothSelected(event) {
-    console.log('boothSelected');
+    console.log('booth Selected');
+    this.updateUserPreference();
   }
 
   wardSelected(event) {
-    console.log('wardSelected');
+    console.log('ward Selected');
+    this.updateUserPreference();
   }
 
-  syncSelected(event){
-    console.log('syncSelected');
+  syncSelected(event) {
+    console.log('sync Selected');
+    this.updateUserPreference();
   }
 
-  syncLocalData(){
-    this.componentUtil.showLoading(() => {
-      setTimeout(() => {
+  updateUserPreference() {
+    const userIdentity = this.kmpUserService.getUserIdentity();
+    const profileFormValues = this.settingsForm.getRawValue();
+    const finalUserIdentity = { ...userIdentity, ...profileFormValues };
+
+    this.kmpUserService
+      .identityUpdate(finalUserIdentity)
+      .then(user => {
+        if (user) {
+          console.log('User Preference Saved!');
+        } else {
+          this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail' });
+        }
+      })
+      .catch(err => {
+        // error
         this.componentUtil.hideLoading();
-        this.componentUtil.showToast(this.translateService.instant('DATA_SUCCESS_UPLOAD'), { cssClass: 'toast-success'})
-      }, 3000);
+        this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail' });
+      });
+  }
+  syncLocalData() {
+    this.componentUtil.showLoading(() => {
+      this.syncDataService.syncDataFromLocal().then(isUploaded => {
+        if (isUploaded) {
+          this.componentUtil.showToast('DATA_SUCCESS_UPLOAD', { cssClass: 'toast-success' });
+        }
+        this.componentUtil.hideLoading();
+      });
     }, 'SYNCING_DATA');
   }
 
@@ -135,6 +171,17 @@ export class SettingsPage implements OnInit {
   }
 
   logout() {
-    this.componentUtil.userLogout();
+    this.componentUtil.showConfirmationAlert(
+      'CONFIRM_LOGOUT',
+      () => {
+        this.componentUtil.showLoading(() => {
+          setTimeout(() => {
+            this.componentUtil.userLogout();
+            this.componentUtil.hideLoading();
+          }, 1000);
+        }, 'LOGGING_OFF');
+      },
+      'LOGOUT_TITLE'
+    );
   }
 }

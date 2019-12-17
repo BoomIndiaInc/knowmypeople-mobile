@@ -70,7 +70,7 @@ export class LoginPage implements OnInit {
             if (kmpUser !== null) {
               this.goToHome();
             }else{
-              this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true });
+              this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true }, true);
               this.componentUtil.userLogout();
             }
           });
@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
           this.loginForm.patchValue({
             password: ''
           });
-          this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true });
+          this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true }, true);
           this.componentUtil.hideLoading();
         }
       );

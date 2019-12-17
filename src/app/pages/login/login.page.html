@@ -1,10 +1,10 @@
-<ion-content >
+<ion-content [color]="'dark'">
   <ion-slides [options]="slideOpts" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
     <ion-slide class="slide-background swiper-no-swiping" *ngFor="let background of backgrounds" [ngStyle]="{'background-image': 'url(' + background +')'}">
     </ion-slide>
   </ion-slides>
-  <div class="login-container">
-    <img class="logo" src="assets/img/logo/logo-KnowMyPeople.png" />
+  <div class="login-container" >
+    <img class="logo" src="assets/img/logo/logo-KnowMyPeople-1.png" />
     <form [formGroup]="loginForm">
       <ion-item>
         <ion-input type="string" formControlName="username"  name="username" placeholder="{{ 'USERNAME' | translate }}"></ion-input>

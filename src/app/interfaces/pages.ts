@@ -6,4 +6,5 @@ export interface Page {
     icon?: string;
     active?: boolean;
     authorities?: string[];
+    enable?: boolean;
 }

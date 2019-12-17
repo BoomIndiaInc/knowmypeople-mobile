@@ -51,7 +51,7 @@ export class ForgotPasswordPage implements OnInit {
     // Attempt to login in through our User service
     this.userService.forgotPassword(this.forgotPasswordForm.value.email).subscribe(
       async () => {
-        this.componentUtil.showToast(this.forgotPasswordSuccessString, { cssClass: 'toast-success'});
+        this.componentUtil.showToast(this.forgotPasswordSuccessString, { cssClass: 'toast-success'}, true);
         this.forgotPasswordForm.reset();
       },
       async response => {
@@ -63,7 +63,7 @@ export class ForgotPasswordPage implements OnInit {
         ){
           displayError = this.networkError;
         }
-        this.componentUtil.showToast(displayError, { cssClass: 'toast-fail' });
+        this.componentUtil.showToast(displayError, { cssClass: 'toast-fail' }, true);
       }
     );
   }

@@ -79,6 +79,7 @@
   "DONE_BUTTON": "Done",
   "CANCEL_BUTTON": "Cancel",
   "DELETE_BUTTON": "Delete",
+  "OK_BUTTON": "Okay",
 
   "CARDS_TITLE": "Social",
 
@@ -94,9 +95,29 @@
   "ABOUT" : "About",
   "ABOUT_US": "About Us",
   "SETTINGS" : "Settings",
-
+  "EDIT_PROFILE": "Edit Profile",
   "PLEASE_WAIT" : "Please wait ...",
   "BoothAgent": "Booth Agent",
   "SYNCING_DATA": "Syncing Local Data ...",
-  "DATA_SUCCESS_UPLOAD": "Local Data successfully uploaded!"
+  "DATA_SUCCESS_UPLOAD": "Local Data successfully uploaded!",
+  "EDIT_OR_ADD_AVATAR" : "Edit / Add Avatar",
+  "GENERAL": "General",
+  "APP_LANGUAGE": "App Language",
+  "ENABLE_AUTO_SYNC": "Enable Auto Sync",
+  "SYNC_LOCAL_DATA": "Sync Local Data",
+  "APPLICATION": "Application",
+  "BOOTH": "Booth",
+  "WARD": "Ward",
+  "ELECTION_TYPE": "Election Type",
+  "NONE": "None",
+  "BASIC": "Basic",
+  "en": "English",
+  "MOBILE_NUMBER": "Mobile Number",
+  "CONFIRM_LOGOUT":"Are you sure you want to logout?",
+  "WARNING" : "Warning!",
+  "LOGGING_OFF" : "Logging Off ...",
+  "USER_TYPE":"User Type",
+  "SAVING_USER_DETAILS": "Saving user details ...",
+  "USER_DETAILS_SAVE_SUCCESS": "User details saved successfully!",
+  "USER_DETAILS_SAVE_FAIL": "Failed to update user details."
 }

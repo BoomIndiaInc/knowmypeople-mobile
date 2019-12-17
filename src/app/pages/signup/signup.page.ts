@@ -63,7 +63,7 @@ export class SignupPage implements OnInit {
     // Attempt to login in through our User service
     this.userService.signup(signupFormValue).subscribe(
       async () => {
-        this.componentUtil.showToast(this.signupSuccessString, { cssClass: 'toast-success'});
+        this.componentUtil.showToast(this.signupSuccessString, { cssClass: 'toast-success'}, true);
         this.signupForm.reset();
       },
       async response => {
@@ -85,7 +85,7 @@ export class SignupPage implements OnInit {
         ){
           displayError = this.networkError;
         }
-        this.componentUtil.showToast(displayError, { cssClass: 'toast-fail' });
+        this.componentUtil.showToast(displayError, { cssClass: 'toast-fail' }, true);
       }
     );
   }

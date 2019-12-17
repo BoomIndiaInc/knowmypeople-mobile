@@ -108,7 +108,7 @@ export class AppComponent {
         // Unable to fetch app configurations
         // const error = JSON.parse(response.error);
         console.log(response.error);
-        this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000});
+        this.componentUtil.showToast(this.appConfigErrorString, { cssClass: 'toast', duration: 5000}, true);
         this.initializeApp(this.resolverService.allProperties);
       }
     );
@@ -163,6 +163,9 @@ export class AppComponent {
 
   showMenu(page: Page): boolean {
     let showMenu = true;
+    if(!page.enable) {
+      return false;
+    }
     if (page.authorities && page.authorities.length > 0) {
       showMenu = this.accountService.hasAnyAuthorityDirect(page.authorities);
     }

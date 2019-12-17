@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'voters',
     loadChildren: './pages/voters/voters.module#VotersPageModule',
     canActivate: [AuthGuard, RoleGuard],
-    data: { role: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_DIST'] }
+    data: { role: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_AGENT', 'ROLE_DIST'] }
   },
   { path: 'accessdenied', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' }

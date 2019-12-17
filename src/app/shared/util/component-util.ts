@@ -6,6 +6,8 @@ import { FormGroup } from '@angular/forms';
 import { Page } from 'src/app/interfaces/pages';
 import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AlertController } from '@ionic/angular';
+import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 
 export const SLIDE_FADE_OPTIONS = {
   on: {
@@ -100,7 +102,9 @@ export class ComponentUtil {
     private authService: AuthServerProvider,
     private accountService: AccountService,
     private resolveService: PropertyResolverService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    public alertController: AlertController,
+    public syncDataService: SyncDataService
   ) {}
 
   showLoading(completeCallBack, message?, dismissCallBack?) {
@@ -127,9 +131,9 @@ export class ComponentUtil {
     }
   }
 
-  async showToast(message, options?) {
+  async showToast(message, options?, isTranslated?:boolean) {
     const toast = await this.toastController.create({
-      message: message,
+      message: (isTranslated)? message : this.translateService.instant(message),
       duration: options && options.duration ? options.duration : 3000,
       position: options && options.position ? options.position : 'top',
       cssClass: options && options.cssClass ? options.cssClass : 'toast',
@@ -147,6 +151,7 @@ export class ComponentUtil {
       error => {},
       () => {
         this.accountService.authenticate(null);
+        this.syncDataService.stop();
         this.navCtrl.navigateRoot('/');
       }
     );
@@ -156,6 +161,34 @@ export class ComponentUtil {
     const menus:Page[]  = this.resolveService.getPropertyValue('menus');
     const filteredMenu: Page[]  = menus.filter((menu :Page) => menu.id === menuId);
     return (filteredMenu && filteredMenu.length>0) ? filteredMenu[0] : null;
+  }
+
+  async showConfirmationAlert( message: string, successCallback, header?: string, failureCallback?) {
+    const alert = await this.alertController.create({
+      header: this.translateService.instant((header)? header: 'WARNING'),
+      message: this.translateService.instant(message),
+      buttons: [
+        {
+          text: this.translateService.instant('CANCEL_BUTTON'),
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            if(failureCallback) {
+              return failureCallback();
+            }
+          }
+        }, {
+          text: this.translateService.instant('OK_BUTTON'),
+          handler: () => {
+            if(successCallback) {
+              return successCallback();
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

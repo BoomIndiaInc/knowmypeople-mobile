@@ -8,8 +8,7 @@ import { BOOTHS_REST_API_URL, ELECTION_TYPE_REST_API_URL, WARDS_REST_API_URL } f
   providedIn: 'root'
 })
 export class KmpService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   fetchAllBooths(): Observable<HttpResponse<any>> {
     return this.http.get<any>(ApiService.API_URL + BOOTHS_REST_API_URL, { observe: 'response' });
@@ -22,23 +21,22 @@ export class KmpService {
   fetchAllWards(): Observable<HttpResponse<any>> {
     return this.http.get<any>(ApiService.API_URL + WARDS_REST_API_URL, { observe: 'response' });
   }
-  booths(): any{
-    this.fetchAllBooths()
-    .subscribe(response => {
-      return of(response.body);
-    });
-  }
-  electionTypes(): any{
-    this.fetchAllElectionTypes()
-    .subscribe(response => {
-      return of(response.body);
-    });
-  }
-  wards(): any{
-    this.fetchAllWards()
-    .subscribe(response => {
+
+  booths(): any {
+    this.fetchAllBooths().subscribe(response => {
       return of(response.body);
     });
   }
 
+  electionTypes(): any {
+    this.fetchAllElectionTypes().subscribe(response => {
+      return of(response.body);
+    });
+  }
+
+  wards(): any {
+    this.fetchAllWards().subscribe(response => {
+      return of(response.body);
+    });
+  }
 }
