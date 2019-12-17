@@ -154,7 +154,18 @@ export class AppComponent {
   }
 
   logout() {
-    this.componentUtil.userLogout();
+    this.componentUtil.showConfirmationAlert(
+      'CONFIRM_LOGOUT',
+      () => {
+        this.componentUtil.showLoading(() => {
+          setTimeout(() => {
+            this.componentUtil.userLogout();
+            this.componentUtil.hideLoading();
+          }, 1000);
+        }, 'LOGGING_OFF');
+      },
+      'LOGOUT_TITLE'
+    );
   }
 
   leaveAReview() {

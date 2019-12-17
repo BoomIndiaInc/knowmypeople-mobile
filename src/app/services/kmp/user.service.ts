@@ -126,22 +126,22 @@ export class KmpUserService {
           this.localStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity)) ||
             this.sessionStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity));
 
-          this.authenticated = true;
+          // this.authenticated = true;
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
 
           // const langKey = this.localStorage.retrieve('locale') || this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
           // this.languageService.changeLanguage(langKey);
         } else {
-          this.userIdentity = null;
-          this.authenticated = false;
+          // this.userIdentity = null;
+          // this.authenticated = false;
         }
         this.authenticationState.next(this.userIdentity);
         return this.userIdentity;
       })
       .catch(err => {
-        this.userIdentity = null;
-        this.authenticated = false;
+        // this.userIdentity = null;
+        // this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;
       });

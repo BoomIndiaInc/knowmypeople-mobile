@@ -119,5 +119,6 @@
   "USER_TYPE":"User Type",
   "SAVING_USER_DETAILS": "Saving user details ...",
   "USER_DETAILS_SAVE_SUCCESS": "User details saved successfully!",
-  "USER_DETAILS_SAVE_FAIL": "Failed to update user details."
+  "USER_DETAILS_SAVE_FAIL": "Failed to update user details.",
+  "SELECT_ATLEAST_ONE_APP_SETTINGS": "Select and set atleast one application setting options (Booth, Ward, Election Type)"
 }

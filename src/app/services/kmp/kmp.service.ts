@@ -22,21 +22,4 @@ export class KmpService {
     return this.http.get<any>(ApiService.API_URL + WARDS_REST_API_URL, { observe: 'response' });
   }
 
-  booths(): any {
-    this.fetchAllBooths().subscribe(response => {
-      return of(response.body);
-    });
-  }
-
-  electionTypes(): any {
-    this.fetchAllElectionTypes().subscribe(response => {
-      return of(response.body);
-    });
-  }
-
-  wards(): any {
-    this.fetchAllWards().subscribe(response => {
-      return of(response.body);
-    });
-  }
 }

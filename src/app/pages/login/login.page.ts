@@ -40,8 +40,8 @@ export class LoginPage implements OnInit {
     private kmpUserService: KmpUserService
   ) {
     this.loginForm = formBuilder.group({
-      username: ['test', Validators.required],
-      password: ['test', Validators.compose([Validators.minLength(4), Validators.required])],
+      username: ['admin', Validators.required],
+      password: ['admin', Validators.compose([Validators.minLength(4), Validators.required])],
       rememberMe: [true, Validators.required]
     });
   }

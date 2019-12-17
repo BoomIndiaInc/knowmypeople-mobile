@@ -108,6 +108,10 @@ export class SettingsPage implements OnInit {
         this.componentUtil.hideLoading();
       }
     );
+
+    if (!!!this.userBoothId && !!!this.userWardId && !!!this.userElectionType) {
+      this.componentUtil.showToast('SELECT_ATLEAST_ONE_APP_SETTINGS', {position: 'middle'});
+    }
   }
 
   electionTypeSelected(event) {
@@ -184,4 +188,14 @@ export class SettingsPage implements OnInit {
       'LOGOUT_TITLE'
     );
   }
+
+  showMenuOption(): boolean {
+    let showMenuOption = true;
+    const settingsFormValue = this.settingsForm.getRawValue();
+    if (!!!settingsFormValue.boothId && !!!settingsFormValue.wardId && !!!settingsFormValue.electionType) {
+      showMenuOption = false;
+    }
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN']) ? true : showMenuOption;
+  }
+
 }

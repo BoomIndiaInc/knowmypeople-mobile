@@ -4,12 +4,15 @@ export const DEFAULT_APP_CONFIG = {
   "version": "0.0.1",
   "authorities": [
     "ROLE_ADMIN",
+    "ROLE_USER",
     "ROLE_AGENT",
     "ROLE_DIST"
   ],
   "mode": "qe",
   "default-menu-id":"settings",
   "default-lang": "en",
+  "supported-languages": ["en"],
+  "active-election-date": "2019-12-17T05:30:28.048Z",
   "menus": [
     {
       "id": "voters",
@@ -20,20 +23,24 @@ export const DEFAULT_APP_CONFIG = {
       "active": false,
       "authorities": [
         "ROLE_ADMIN",
-        "ROLE_AGENT"
-      ]
+        "ROLE_AGENT",
+        "ROLE_USER"
+      ],
+      "enable": true
     },
     {
       "id": "about",
-      "title": "ABOUT",
+      "title": "ABOUT_US",
       "url": "/about",
-      "direct": "forward",
+      "direct": "root",
       "icon": "information-circle-outline",
       "active": false,
       "authorities": [
         "ROLE_ADMIN",
-        "ROLE_AGENT"
-      ]
+        "ROLE_AGENT",
+        "ROLE_USER"
+      ],
+      "enable": true
     },
     {
       "id": "settings",
@@ -44,8 +51,24 @@ export const DEFAULT_APP_CONFIG = {
       "active": false,
       "authorities": [
         "ROLE_ADMIN",
-        "ROLE_AGENT"
-      ]
+        "ROLE_AGENT",
+        "ROLE_USER"
+      ],
+      "enable": true
+    },
+    {
+      "id": "edit-profile",
+      "title": "EDIT_PROFILE",
+      "url": "/edit-profile",
+      "direct": "forward",
+      "icon": "contact",
+      "active": false,
+      "authorities": [
+        "ROLE_ADMIN",
+        "ROLE_AGENT",
+        "ROLE_USER"
+      ],
+      "enable": false
     }
   ],
   "servers": {
@@ -69,7 +92,10 @@ export const DEFAULT_APP_CONFIG = {
         "The application is designed to show the Estimated Voter Turnout for each State which can further be drilled down to Parliamentary"
     ]
   },
-  "privacy": {}
+  "privacy": {},
+  "auto-sync" : false,
+  "auto-sync-duration": 30000
+  
 };
 
 export const LOGIN_BACKGROUNDS = [
