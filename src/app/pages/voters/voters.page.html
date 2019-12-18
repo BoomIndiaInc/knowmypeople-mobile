@@ -16,10 +16,10 @@
       </ion-buttons> -->
     </ion-toolbar>
     <ion-toolbar color="dark">
-      <ion-searchbar [(ngModel)]="searchKey"></ion-searchbar>
+      <ion-searchbar [(ngModel)]="searchKey" (ionChange)="setFilteredItems($event)" (ionInput)="onVoterInput($event)"></ion-searchbar>
       <ion-buttons slot="end">
-        <ion-button size="small" shape="round" color="medium" (click)="searchFilter()">
-          <ion-icon name="options"></ion-icon>
+        <ion-button size="small" shape="round" color="medium" (click)="onVoterSearchSettings()">
+          <ion-icon name="cog"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -33,7 +33,8 @@
     
           <ng-template #defaultUserIcon>
             <ion-icon name="contact"></ion-icon> 
-          </ng-template>        </ion-avatar>     
+          </ng-template>        
+        </ion-avatar>     
             
         <ion-label class="ion-text-capitalize">
           <p>{{ voter.voterId }}</p>
@@ -41,6 +42,9 @@
           <h2>{{ voter.voterName }}</h2>
           <h3>{{ voter.husbandOrFatherName }}</h3>
         </ion-label>
+        <ion-avatar slot="end">
+          <ion-icon name="arrow-forward" color="primary"></ion-icon>        
+        </ion-avatar>   
       </ion-item>
     </ion-list>
 

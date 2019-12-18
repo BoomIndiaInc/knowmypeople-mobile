@@ -18,8 +18,7 @@ import { AppComponent } from './app.component';
 import { AuthExpiredInterceptor } from './interceptors/auth-expired.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 // Modal Page
-import { ImagePageModule } from './pages/modal/image/image.module';
-import { SearchFilterPageModule } from './pages/modal/search-filter/search-filter.module';
+import { VoterSearchSettingsPageModule } from './pages/modal/voter-search-settings/voter-search-settings.module';
 
 // Components
 import { NotificationsComponent } from './components/notifications/notifications.component';
@@ -66,8 +65,7 @@ export function preStartupHandler(applicationPreStartupService: ApplicationPreSt
     NgxWebstorageModule.forRoot({ prefix: 'kmp', separator: '-' }),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
-    ImagePageModule,
-    SearchFilterPageModule
+    VoterSearchSettingsPageModule
   ],
   providers: [
     {

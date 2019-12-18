@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController} from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { LoginService } from 'src/app/services/login/login.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -40,8 +40,8 @@ export class LoginPage implements OnInit {
     private kmpUserService: KmpUserService
   ) {
     this.loginForm = formBuilder.group({
-      username: ['admin', Validators.required],
-      password: ['Boom123#', Validators.compose([Validators.minLength(4), Validators.required])],
+      username: ['test', Validators.required],
+      password: ['test', Validators.compose([Validators.minLength(4), Validators.required])],
       rememberMe: [true, Validators.required]
     });
   }
@@ -60,7 +60,7 @@ export class LoginPage implements OnInit {
   }
 
   onLogin() {
-    this.componentUtil.showLoading(()=>{
+    this.componentUtil.showLoading(() => {
       this.loginService.login(this.loginForm.value).then(
         () => {
           this.kmpUserService.identity(true).then(kmpUser => {
@@ -69,14 +69,13 @@ export class LoginPage implements OnInit {
             // the language selected by the user during his registration
             if (kmpUser !== null) {
               this.goToHome();
-            }else{
+            } else {
               this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true }, true);
               this.componentUtil.userLogout();
             }
           });
         },
         async err => {
-          
           // Unable to log in
           this.loginForm.patchValue({
             password: ''
@@ -86,7 +85,6 @@ export class LoginPage implements OnInit {
         }
       );
     });
-    
   }
 
   goToHome() {

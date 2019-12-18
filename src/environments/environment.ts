@@ -4,10 +4,8 @@
 
 export const environment = {
   production: false,
-//  apiUrl: 'http://localhost:8080/api',
-//  configUrl: 'https://localhost:8080/content/KMPConfig.json'
- apiUrl: 'https://knowmypeople.com/api',
- configUrl: 'https://knowmypeople.com/content/KMPConfig.json'
+  apiUrl: 'http://localhost:8080/api',
+  configUrl: 'https://localhost:8080/content/KMPConfig.json'
 };
 
 /*

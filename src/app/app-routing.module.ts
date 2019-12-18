@@ -17,8 +17,13 @@ const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { role: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_AGENT', 'ROLE_DIST'] }
   },
+  {
+    path: 'voter-search-settings',
+    loadChildren: './pages/modal/voter-search-settings/voter-search-settings.module#VoterSearchSettingsPageModule'
+  },
+  { path: 'voters/:index', loadChildren: './pages/voter-detail/voter-detail/voter-detail.module#VoterDetailPageModule' },
   { path: 'accessdenied', redirectTo: '', pathMatch: 'full' },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],

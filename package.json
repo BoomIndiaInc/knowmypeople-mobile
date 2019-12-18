@@ -15,7 +15,8 @@
     "test:coverage": "jest --coverage",
     "e2e-test": "protractor ./e2e/protractor.conf.js",
     "e2e-update": "node node_modules/webdriver-manager/bin/webdriver-manager update --gecko false",
-    "prettier": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\" --loglevel silent"
+    "prettier": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\" --loglevel silent",
+    "gh-pages": "ng build --base-href 'https://BoomIndiaInc.github.io/knowmypeople-mobile/' --prod && npx ngh --dir=www/"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +43,7 @@
     "@ng-bootstrap/ng-bootstrap": "5.1.1",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
+    "angular-cli-ghpages": "^0.6.0",
     "cordova-android": "7.0.0",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-device": "^2.0.2",
