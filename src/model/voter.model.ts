@@ -30,6 +30,7 @@ export class Voter {
         public address: string = null,
         public religion: string = null,
         public boothId: string = null,
+        public imageUrl: string = null,
         public voterElectionDTOList: VoterElection[] = []
       ) {}
 }

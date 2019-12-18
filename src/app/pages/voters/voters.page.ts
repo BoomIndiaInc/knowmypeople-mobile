@@ -47,7 +47,7 @@ export class VotersPage implements OnInit {
     private resolverService: PropertyResolverService,
     public formBuilder: FormBuilder,
     public syncDataService: SyncDataService,
-    private votersService: VoterService,
+    private votersService: VoterService
   ) {}
 
   ionViewWillEnter() {
@@ -64,12 +64,9 @@ export class VotersPage implements OnInit {
   ngOnInit() {
     this.componentUtil.showLoading(() => {
       this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
-        
         console.log(voters);
-        setTimeout(() => {
-          this.voters = voters;
-          this.componentUtil.hideLoading();
-        }, 1000);
+        this.voters = voters;
+        this.componentUtil.hideLoading();
       });
     });
   }

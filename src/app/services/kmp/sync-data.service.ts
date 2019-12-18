@@ -58,7 +58,7 @@ export class SyncDataService {
     }
     this.interval = setInterval(() => {
       this.syncDataFromLocal();
-    }, this.autoSyncDuration);
+    }, this.autoSyncDuration * 1000);
   }
 
   stop() {
