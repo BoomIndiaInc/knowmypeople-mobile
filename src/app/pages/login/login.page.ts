@@ -41,7 +41,7 @@ export class LoginPage implements OnInit {
   ) {
     this.loginForm = formBuilder.group({
       username: ['admin', Validators.required],
-      password: ['admin', Validators.compose([Validators.minLength(4), Validators.required])],
+      password: ['Boom123#', Validators.compose([Validators.minLength(4), Validators.required])],
       rememberMe: [true, Validators.required]
     });
   }

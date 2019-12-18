@@ -66,21 +66,24 @@ export class SyncDataService {
     this.interval = null;
   }
 
-  syncDataFromLocal() {
-    const localVoters: Voter[] = this.voterService.getVotersFromLocal();
-    if (localVoters && localVoters.length > 0) {
-      return this.uploadVoters(localVoters).then((isUploaded: boolean) => {
-        if (isUploaded) {
-          console.log('Local Voters Data uploaded successfully.');
-          return isUploaded;
+  syncDataFromLocal(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.voterService.getVotersFromLocal().then((localVoters) => {
+        if (localVoters && localVoters.length > 0) {
+          return this.uploadVoters(localVoters).then((isUploaded: boolean) => {
+            if (isUploaded) {
+              console.log('Local Voters Data uploaded successfully.');
+              return resolve(isUploaded);
+            } else {
+              console.log('Failed to upload Local Voters Data');
+              return resolve(isUploaded);
+            }
+          });
         } else {
-          console.log('Failed to upload Local Voters Data');
-          return isUploaded;
+          return resolve(false);
         }
       });
-    } else {
-      return Promise.resolve(false);
-    }
+  });
   }
 
   uploadVoters(voters: Voter[]): Promise<any> {

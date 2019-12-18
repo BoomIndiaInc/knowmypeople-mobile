@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Subscription, throwError } from 'rxjs';
 import { CoreUtil } from 'src/app/shared/util/core-util';
@@ -6,17 +6,17 @@ import { CoreUtil } from 'src/app/shared/util/core-util';
 @Injectable({
   providedIn: 'root'
 })
-export class NetworkService {
+export class NetworkService implements OnInit {
   connectSubscription: Subscription;
   disconnectSubscription: Subscription;
-  private isNetworkOnline = false;
-  constructor(private network: Network, private coreUtils: CoreUtil) { 
-    if(this.coreUtils.isRunningInWebMode()) {
+  private isNetworkOnline = true;
+  constructor(private network: Network, private coreUtils: CoreUtil) {
+    if (this.coreUtils.isRunningInWebMode()) {
       this.isNetworkOnline = true; // Set to false if you are testing for offline mode in browser
     }
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.subscribe();
   }
 
@@ -40,12 +40,12 @@ export class NetworkService {
 
   onOnline() {
     this.isNetworkOnline = true;
-    console.log("Network :: Online")
+    console.log('Network :: Online');
   }
 
   onOffline() {
     this.isNetworkOnline = false;
-    console.log("Network :: Offline")
+    console.log('Network :: Offline');
   }
 
   isOnline(): boolean {
@@ -64,5 +64,4 @@ export class NetworkService {
     };
     return throwError(errorResponse);
   }
-
 }

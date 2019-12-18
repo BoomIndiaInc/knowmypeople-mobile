@@ -1,10 +1,10 @@
-<ion-content [color]="'dark'">
-  <ion-slides [options]="slideOpts" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
+<ion-content color="dark">
+  <!-- <ion-slides [options]="slideOpts" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
     <ion-slide class="slide-background swiper-no-swiping" *ngFor="let background of backgrounds" [ngStyle]="{'background-image': 'url(' + background +')'}">
     </ion-slide>
-  </ion-slides>
+  </ion-slides> -->
   <div class="login-container" >
-    <img class="logo" src="assets/img/logo/logo-KnowMyPeople-1.png" />
+    <img class="logo" src="assets/img/logo/logo-KnowMyPeople.png" />
     <form [formGroup]="loginForm">
       <ion-item>
         <ion-input type="string" formControlName="username"  name="username" placeholder="{{ 'USERNAME' | translate }}"></ion-input>
@@ -18,13 +18,8 @@
       </ion-item>
       <ion-button class="ion-margin" color="primary" [disabled]="!loginForm.valid" (click)="onLogin()">{{ 'LOGIN_BUTTON' | translate }}</ion-button>
       <p class="forgot-password" routerLink="/forgot-password" ><strong>{{ 'FORGOT_YOUR_PASSWORD' | translate }}</strong></p>
+
+      <p class="signup" color="light" routerLink="/signup" >{{ 'NO_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'SIGNUP_HERE' | translate}}</strong>.</p>
     </form>
   </div>
 </ion-content>
-<ion-footer>
-  <ion-toolbar class="footer" color="primary" routerLink="/signup">
-    <div>
-      <span >{{ 'NO_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'SIGNUP_HERE' | translate}}</strong>.</span>
-    </div>
-  </ion-toolbar>
-</ion-footer>

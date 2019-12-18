@@ -1,14 +1,14 @@
-<ion-content>
+<ion-content color="dark">
   <!-- <ion-fab vertical="top" horizontal="start" slot="fixed" >
     <ion-fab-button routerLink="/login">
       <ion-icon name="close"></ion-icon>
     </ion-fab-button>
   </ion-fab> -->
-  <ion-slides [options]="slideOpts" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
+  <!-- <ion-slides [options]="slideOpts" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
     <ion-slide class="slide-background swiper-no-swiping" *ngFor="let background of backgrounds"
       [ngStyle]="{'background-image': 'url(' + background +')'}">
     </ion-slide>
-  </ion-slides>
+  </ion-slides> -->
   <div class="signup-container">
     <img class="logo" src="assets/img/logo/logo-KnowMyPeople.png" />
     <form [formGroup]="signupForm">
@@ -30,13 +30,8 @@
       </ion-item>
       <ion-button class="ion-margin" color="primary" [disabled]="!signupForm.valid" (click)="doSignup()">
         {{ 'SIGNUP_BUTTON' | translate }}</ion-button>
+       <p class="signin" color="light" routerLink="/login" >{{ 'EXIST_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'LOGIN_HERE' | translate}}</strong>.</p>
+
     </form>
   </div>
 </ion-content>
-<ion-footer>
-  <ion-toolbar class="footer" color="primary" routerLink="/login">
-    <div (click)="onOpenLogin()">
-      <span>{{ 'EXIST_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'LOGIN_BUTTON' | translate}}</strong>.</span>
-    </div>
-  </ion-toolbar>
-</ion-footer>

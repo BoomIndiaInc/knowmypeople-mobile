@@ -126,5 +126,6 @@
   "ROLE_USER": "User",
   "ROLE_AGENT": "Agent",
   "ROLE_DIST": "Distributor",
-  "ROLE_ANONYMOUS": "Anonymous"
+  "ROLE_ANONYMOUS": "Anonymous",
+  "LOGIN_HERE": "Login Here"
 }
