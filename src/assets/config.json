@@ -24,7 +24,9 @@
       "authorities": [
         "ROLE_ADMIN",
         "ROLE_AGENT",
-        "ROLE_USER"
+        "ROLE_USER",
+        "ROLE_DIST",
+        "ROLE_ANONYMOUS"
       ],
       "enable": true
     },
@@ -95,5 +97,4 @@
   "privacy": {},
   "auto-sync" : false,
   "auto-sync-duration": 30000
-  
 }

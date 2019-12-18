@@ -67,7 +67,6 @@ export class SignupPage implements OnInit {
         this.signupForm.reset();
       },
       async response => {
-        debugger;
         // Unable to sign up
         const error = JSON.parse(response.error);
         let displayError = this.signupErrorString;

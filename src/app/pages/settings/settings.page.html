@@ -72,6 +72,7 @@
         <h5>{{'APPLICATION'| translate}}</h5>
       </ion-text>
     </ion-list-header>
+    
     <ion-item *ngIf="booths">
       <ion-icon name="albums" slot="start" [color]="settingsForm?.getRawValue()?.boothId ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'BOOTH'| translate}}</ion-label>
@@ -81,6 +82,7 @@
         
       </ion-select>
     </ion-item>
+
     <ion-item *ngIf="wards">
       <ion-icon name="cube" slot="start" [color]="settingsForm?.getRawValue()?.wardId ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'WARD'| translate}} </ion-label>
@@ -89,6 +91,7 @@
         <ion-select-option *ngFor="let ward of wards" [value]="ward">{{ward}}</ion-select-option>
       </ion-select>
     </ion-item>
+
     <ion-item *ngIf="electionTypes">
       <ion-icon name="archive" slot="start" [color]="settingsForm?.getRawValue()?.electionType ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'ELECTION_TYPE'| translate}}</ion-label>

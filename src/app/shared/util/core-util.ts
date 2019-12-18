@@ -27,4 +27,15 @@ export class CoreUtil {
   public isRunningInWebMode(): boolean {
     return window.cordova === undefined || window.cordova === null;
   }
+
+  generateQueryParams(criteria: any): string {
+    const params = new URLSearchParams();
+    // tslint:disable-next-line:forin
+    for (const key in criteria) {
+      if (!!criteria[key]) {
+        params.set(key, criteria[key]);
+      }
+    }
+    return params.toString();
+  }
 }

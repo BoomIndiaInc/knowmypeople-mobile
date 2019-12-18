@@ -1,8 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { FormsModule, FormBuilder } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { PopmenuComponent } from './../../components/popmenu/popmenu.component';
 
@@ -20,9 +22,11 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    TranslateModule, ReactiveFormsModule
   ],
-  declarations: [VotersPage, PopmenuComponent]
+  declarations: [VotersPage, PopmenuComponent],
+  providers: [FormBuilder]
 })
 
 export class VotersPageModule {}

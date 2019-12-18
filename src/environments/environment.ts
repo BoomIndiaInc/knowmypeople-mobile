@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
- // apiUrl: 'https://knowmypeople.com/api' // 
- apiUrl: 'http://localhost:8080/api'
+//  apiUrl: 'https://knowmypeople.com/api',  //
+ apiUrl: 'http://localhost:8080/api',
+ configUrl: 'https://localhost:8080/content/KMPConfig.json'
 };
 
 /*

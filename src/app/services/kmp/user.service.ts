@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Observable, Subject } from 'rxjs';
 import { ApiService } from '../api/api.service';
-import { USER_ACCOUNT_REST_API_URL, USER_DETAILS_REST_API_URL } from './../../shared/util/service-util';
+import { USER_DETAILS_SAVE_REST_API_URL, USER_DETAILS_REST_API_URL } from './../../shared/util/service-util';
 import { CoreUtil } from 'src/app/shared/util/core-util';
-import { User } from './../../../model/user.model';
+import { User, UserType } from './../../../model/user.model';
 import { AccountService } from '../auth/account.service';
 import { PropertyResolverService } from '../property-resolver/property-resolver.service';
 
@@ -31,7 +31,7 @@ export class KmpUserService {
   }
 
   save(user: User): Observable<HttpResponse<any>> {
-    return this.http.post(ApiService.API_URL + USER_DETAILS_REST_API_URL, user, { observe: 'response' });
+    return this.http.put(ApiService.API_URL + USER_DETAILS_SAVE_REST_API_URL, user, { observe: 'response' });
   }
 
   authenticate(identity) {
@@ -73,6 +73,24 @@ export class KmpUserService {
     );
   }
 
+  hasAuthorityDirect(authorities: string[]): boolean {
+    let hasAuthority = false;
+    if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
+      return false;
+    }
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < authorities.length; i++) {
+      if (this.userIdentity.authorities.includes(authorities[i])) {
+        hasAuthority =  true;
+      } else {
+        return hasAuthority = false;
+      }
+    }
+
+    return hasAuthority;
+  }
+
   identity(force?: boolean): Promise<any> {
     if (force === true) {
       this.userIdentity = undefined;
@@ -95,6 +113,7 @@ export class KmpUserService {
             this.sessionStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity));
 
           this.authenticated = true;
+          this.userIdentity.userType = this.getUserType();
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
 
@@ -126,6 +145,7 @@ export class KmpUserService {
           this.localStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity)) ||
             this.sessionStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity));
 
+          this.userIdentity.userType = this.getUserType();
           // this.authenticated = true;
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
@@ -133,14 +153,14 @@ export class KmpUserService {
           // const langKey = this.localStorage.retrieve('locale') || this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
           // this.languageService.changeLanguage(langKey);
         } else {
-          // this.userIdentity = null;
+          this.userIdentity = user;
           // this.authenticated = false;
         }
         this.authenticationState.next(this.userIdentity);
         return this.userIdentity;
       })
       .catch(err => {
-        // this.userIdentity = null;
+        this.userIdentity = user;
         // this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
         return null;
@@ -184,7 +204,17 @@ export class KmpUserService {
   }
 
   getUserType(): string {
-    return this.isIdentityResolved() ? this.userIdentity.agentType : null;
+    let userType = UserType.ANONYMOUS;
+    if (this.hasAuthorityDirect([UserType.ADMIN])) {
+      userType = UserType.ADMIN;
+    } else if (this.hasAuthorityDirect([UserType.USER])) {
+      userType = UserType.USER;
+    } else if (this.hasAuthorityDirect([UserType.AGENT])) {
+      userType = UserType.AGENT;
+    } else if (this.hasAuthorityDirect([UserType.DISTRIBUTOR])) {
+      userType = UserType.DISTRIBUTOR;
+    }
+    return this.isIdentityResolved() ? userType : null;
   }
 
   getBoothId(): string {
@@ -213,4 +243,8 @@ export class KmpUserService {
   getUserIdentity(): User {
     return this.isIdentityResolved() ? this.userIdentity : null;
   }
+  getUserName(): string {
+    return this.isIdentityResolved() ? this.userIdentity.login : null;
+  }
+  
 }

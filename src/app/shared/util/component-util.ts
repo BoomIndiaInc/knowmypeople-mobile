@@ -74,21 +74,21 @@ export const SLIDE_FADE_OPTIONS = {
 // custom validator to check that two fields match
 export function MustMatch(controlName: string, matchingControlName: string) {
   return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
 
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-          // return if another validator has already found an error on the matchingControl
-          return;
-      }
+    if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+      // return if another validator has already found an error on the matchingControl
+      return;
+    }
 
-      // set error on matchingControl if validation fails
-      if (control.value !== matchingControl.value) {
-          matchingControl.setErrors({ mustMatch: true });
-      } else {
-          matchingControl.setErrors(null);
-      }
-  }
+    // set error on matchingControl if validation fails
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ mustMatch: true });
+    } else {
+      matchingControl.setErrors(null);
+    }
+  };
 }
 @Injectable({
   providedIn: 'root'
@@ -109,7 +109,7 @@ export class ComponentUtil {
 
   showLoading(completeCallBack, message?, dismissCallBack?) {
     if (this.loading) return;
-    const translatedMessage = (!!message) ? this.translateService.instant(message) : this.translateService.instant('PLEASE_WAIT');
+    const translatedMessage = !!message ? this.translateService.instant(message) : this.translateService.instant('PLEASE_WAIT');
     this.loadingCtrl
       .create({
         message: translatedMessage
@@ -117,9 +117,9 @@ export class ComponentUtil {
       .then(loading => {
         this.loading = loading;
         this.loading.present();
-        if(completeCallBack) return completeCallBack();
+        if (completeCallBack) return completeCallBack();
         this.loading.onDidDismiss().then(dis => {
-          if(dismissCallBack) return dismissCallBack();
+          if (dismissCallBack) return dismissCallBack();
         });
       });
   }
@@ -131,9 +131,9 @@ export class ComponentUtil {
     }
   }
 
-  async showToast(message, options?, isTranslated?:boolean) {
+  async showToast(message, options?, isTranslated?: boolean) {
     const toast = await this.toastController.create({
-      message: (isTranslated)? message : this.translateService.instant(message),
+      message: isTranslated ? message : this.translateService.instant(message),
       duration: options && options.duration ? options.duration : 3000,
       position: options && options.position ? options.position : 'top',
       cssClass: options && options.cssClass ? options.cssClass : 'toast',
@@ -157,30 +157,31 @@ export class ComponentUtil {
     );
   }
 
-  getMenuById(menuId: string ): Page {
-    const menus:Page[]  = this.resolveService.getPropertyValue('menus');
-    const filteredMenu: Page[]  = menus.filter((menu :Page) => menu.id === menuId);
-    return (filteredMenu && filteredMenu.length>0) ? filteredMenu[0] : null;
+  getMenuById(menuId: string): Page {
+    const menus: Page[] = this.resolveService.getPropertyValue('menus');
+    const filteredMenu: Page[] = menus.filter((menu: Page) => menu.id === menuId);
+    return filteredMenu && filteredMenu.length > 0 ? filteredMenu[0] : null;
   }
 
-  async showConfirmationAlert( message: string, successCallback, header?: string, failureCallback?) {
+  async showConfirmationAlert(message: string, successCallback, header?: string, failureCallback?) {
     const alert = await this.alertController.create({
-      header: this.translateService.instant((header)? header: 'WARNING'),
+      header: this.translateService.instant(header ? header : 'WARNING'),
       message: this.translateService.instant(message),
       buttons: [
         {
           text: this.translateService.instant('CANCEL_BUTTON'),
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
-            if(failureCallback) {
+          handler: blah => {
+            if (failureCallback) {
               return failureCallback();
             }
           }
-        }, {
+        },
+        {
           text: this.translateService.instant('OK_BUTTON'),
           handler: () => {
-            if(successCallback) {
+            if (successCallback) {
               return successCallback();
             }
           }
@@ -190,5 +191,6 @@ export class ComponentUtil {
 
     await alert.present();
   }
+
 
 }

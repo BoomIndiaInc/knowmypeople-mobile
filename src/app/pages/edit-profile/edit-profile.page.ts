@@ -10,6 +10,7 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
 import { KmpService } from 'src/app/services/kmp/kmp.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { User } from 'src/model/user.model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -49,7 +50,7 @@ export class EditProfilePage implements OnInit {
     if (!!menuId) {
       this.pageMenu = this.componentUtil.getMenuById(menuId);
     }
-    this.userName = this.kmpUserService.getUserId();
+    this.userName = this.kmpUserService.getUserName();
     this.userType = this.kmpUserService.getUserType();
     this.userImageUrl = this.kmpUserService.getImageUrl();
     this.firstName = this.kmpUserService.getFirstName();
@@ -59,8 +60,8 @@ export class EditProfilePage implements OnInit {
     this.profileForm = formBuilder.group({
       firstName: [this.firstName],
       lastName: [this.lastName],
-      mobileNumber: [this.mobileNumber],
       emailId: [this.emailId],
+      mobileNumber: [this.mobileNumber],
       userType: [this.userType]
     });
   }
@@ -70,13 +71,23 @@ export class EditProfilePage implements OnInit {
   }
 
   init() {
-    
+    this.kmpUserService.getAuthenticationState().subscribe((kmpUser: User) => {
+      if (kmpUser) {
+        this.userName = kmpUser.login;
+        this.userType = kmpUser.userType;
+        this.userImageUrl = kmpUser.imageUrl;
+        this.firstName = kmpUser.firstName;
+        this.lastName = kmpUser.lastName;
+        this.mobileNumber = kmpUser.mobileNumber;
+        this.emailId = kmpUser.emailId;
+      }
+    });
   }
   onEdit() {
 
-    this.componentUtil.showLoading(()=> {
+    this.componentUtil.showLoading(() => {
       const userIdentity = this.kmpUserService.getUserIdentity();
-      let profileFormValues = this.profileForm.getRawValue();
+      const profileFormValues = this.profileForm.getRawValue();
       const finalUserIdentity = {...userIdentity, ...profileFormValues};
       
       this.kmpUserService.save(finalUserIdentity)

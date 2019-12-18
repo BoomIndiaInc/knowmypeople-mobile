@@ -91,8 +91,8 @@ export class AppComponent {
       if (kmpUser) {
         this.userAuthenticated = true;
         this.userAuthorities = kmpUser.authorities;
-        this.userName = kmpUser.userId;
-        this.userType = kmpUser.agentType;
+        this.userName = kmpUser.login;
+        this.userType = kmpUser.userType;
         // this.userImageUrl = user.imageUrl;
       }
     });
@@ -101,7 +101,7 @@ export class AppComponent {
   getAppConfig() {
     this.appService.appConfig().subscribe(
       response => {
-        this.resolverService.allProperties = response;
+        this.resolverService.allProperties = response.body;
         this.initializeApp(response);
       },
       async response => {
