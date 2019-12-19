@@ -14,11 +14,12 @@
   "supported-languages": ["en"],
   "active-election-date": "2019-12-17T05:30:28.048Z",
   "menus": [
+    
     {
       "id": "voters",
       "title": "VOTERS",
       "url": "/voters",
-      "direct": "forward",
+      "direct": "root",
       "icon": "people",
       "active": false,
       "authorities": [
@@ -29,6 +30,22 @@
         "ROLE_ANONYMOUS"
       ],
       "enable": true
+    },
+    {
+      "id": "voter-details",
+      "title": "VOTER_DETAILS",
+      "url": "/voters/:",
+      "direct": "forward",
+      "icon": "people",
+      "active": false,
+      "authorities": [
+        "ROLE_ADMIN",
+        "ROLE_AGENT",
+        "ROLE_USER",
+        "ROLE_DIST",
+        "ROLE_ANONYMOUS"
+      ],
+      "enable": false
     },
     {
       "id": "about",

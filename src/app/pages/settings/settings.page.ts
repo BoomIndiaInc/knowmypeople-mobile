@@ -14,6 +14,7 @@ import { KmpService } from 'src/app/services/kmp/kmp.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 import { VoterService } from 'src/app/services/kmp/voter.service';
+import { Voter } from 'src/model/voter.model';
 
 @Component({
   selector: 'app-settings',
@@ -33,6 +34,7 @@ export class SettingsPage implements OnInit {
   language: any;
   nullValue: string = null;
   searchCriteria: any = {};
+  showMenuBar: boolean;
   public settingsForm: FormGroup;
 
   languages: any = ['en'];
@@ -55,7 +57,7 @@ export class SettingsPage implements OnInit {
     public formBuilder: FormBuilder,
     public syncDataService: SyncDataService,
     private votersService: VoterService,
-    public menuCtrl: MenuController,
+    public menuCtrl: MenuController
   ) {
     const menuId = 'settings';
     console.log(menuId);
@@ -101,14 +103,13 @@ export class SettingsPage implements OnInit {
   }
 
   showMenuOption(): boolean {
-    let showMenuOption = true;
+    let showMenuOption = false;
     const settingsFormValue = this.settingsForm.getRawValue();
-    if (!!!settingsFormValue.boothId && !!!settingsFormValue.wardId && !!!settingsFormValue.electionType) {
-      showMenuOption = false;
+    if ((!!settingsFormValue.boothId || !!settingsFormValue.wardId) && !!settingsFormValue.electionType) {
+      showMenuOption = true;
     }
-    return this.accountService.hasAnyAuthorityDirect([UserType.ADMIN]) ? true : showMenuOption;
+    return (this.showMenuBar = this.accountService.hasAnyAuthorityDirect([UserType.ADMIN]) ? true : showMenuOption);
   }
-
 
   init() {
     this.kmpUserService.getAuthenticationState().subscribe((kmpUser: User) => {
@@ -142,14 +143,25 @@ export class SettingsPage implements OnInit {
   }
 
   fetchVoters() {
-    this.votersService
-      .fetchVoters(this.searchCriteria.boothId, this.searchCriteria.wardId, this.searchCriteria.electionType)
-      .then(voters => {
+
+    this.votersService.getVotersFromLocal().then((localVoters: Voter[]) => {
+      if (localVoters && localVoters.length === 0) {
+        console.log('Fetching voters from server ...');
+        this.votersService
+          .fetchVoters(this.searchCriteria.boothId, this.searchCriteria.wardId, this.searchCriteria.electionType)
+          .then(voters => {
+            this.componentUtil.hideLoading();
+            if ((!!!this.userBoothId || !!!this.userWardId) && !!!this.userElectionType) {
+              this.componentUtil.showToast('SELECT_ATLEAST_ONE_APP_SETTINGS');
+            }
+          });
+      } else {
         this.componentUtil.hideLoading();
-        if (!!!this.userBoothId && !!!this.userWardId && !!!this.userElectionType) {
+        if ((!!!this.userBoothId || !!!this.userWardId) && !!!this.userElectionType) {
           this.componentUtil.showToast('SELECT_ATLEAST_ONE_APP_SETTINGS');
         }
-      });
+      }
+    });
   }
 
   languageSelected(event) {
@@ -165,21 +177,21 @@ export class SettingsPage implements OnInit {
   boothSelected(event) {
     console.log('booth Selected');
     this.updateUserPreference();
-    this.searchCriteria.boothId = (this.settingsForm.getRawValue()) ? this.settingsForm.getRawValue().boothId : null;
+    this.searchCriteria.boothId = this.settingsForm.getRawValue() ? this.settingsForm.getRawValue().boothId : null;
     this.fetchingVotersForCriteria();
   }
 
   wardSelected(event) {
     console.log('ward Selected');
     this.updateUserPreference();
-    this.searchCriteria.wardId = (this.settingsForm.getRawValue()) ? this.settingsForm.getRawValue().wardId : null;
+    this.searchCriteria.wardId = this.settingsForm.getRawValue() ? this.settingsForm.getRawValue().wardId : null;
     this.fetchingVotersForCriteria();
   }
 
   electionTypeSelected(event) {
     console.log('electionType Selected');
     this.updateUserPreference();
-    this.searchCriteria.electionType = (this.settingsForm.getRawValue()) ? this.settingsForm.getRawValue().electionType : null;
+    this.searchCriteria.electionType = this.settingsForm.getRawValue() ? this.settingsForm.getRawValue().electionType : null;
     this.fetchingVotersForCriteria();
   }
 
@@ -190,6 +202,7 @@ export class SettingsPage implements OnInit {
   }
 
   updateUserPreference() {
+    this.menuCtrl.enable(this.showMenuOption());
     const userIdentity = this.kmpUserService.getUserIdentity();
     const profileFormValues = this.settingsForm.getRawValue();
     const finalUserIdentity = { ...userIdentity, ...profileFormValues };
@@ -238,5 +251,4 @@ export class SettingsPage implements OnInit {
       'LOGOUT_TITLE'
     );
   }
-
 }

@@ -19,11 +19,18 @@ const routes: Routes = [
   },
   {
     path: 'voter-search-settings',
-    loadChildren: './pages/modal/voter-search-settings/voter-search-settings.module#VoterSearchSettingsPageModule'
+    loadChildren: './pages/modal/voter-search-settings/voter-search-settings.module#VoterSearchSettingsPageModule',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_AGENT', 'ROLE_DIST'] }
   },
-  { path: 'voters/:index', loadChildren: './pages/voter-detail/voter-detail/voter-detail.module#VoterDetailPageModule' },
+  {
+    path: 'voters/:voterPk',
+    loadChildren: './pages/voter-detail/voter-detail/voter-detail.module#VoterDetailPageModule',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_AGENT', 'ROLE_DIST'] }
+  },
   { path: 'accessdenied', redirectTo: '', pathMatch: 'full' },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '' }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],

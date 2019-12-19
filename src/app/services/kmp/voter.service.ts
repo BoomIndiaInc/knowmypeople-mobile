@@ -36,9 +36,23 @@ export class VoterService {
     const electionType = this.kmpUserService.getElectionType();
     return `${boothId}-${wardId}-${electionType}`;
   }
+
   getVotersFromLocal(): Promise<any> {
-    const voters =  JSON.parse(this.localStorage.retrieve(`voters-${this.getVotersDataKey()}`)) as Voter[];
-    return Promise.resolve((voters && voters.length > 0) ? voters : []);
+    const localVoters = [];
+    const voters: Voter[] = JSON.parse(this.localStorage.retrieve(`voters-${this.getVotersDataKey()}`)) as Voter[];
+    voters.filter((voter: Voter) => {
+      voter.voterElectionDTOList = voter.voterElectionDTOList.filter((voterElection: VoterElection) => {
+        return (voterElection.electionType === this.kmpUserService.getElectionType());
+      });
+      localVoters.push(voter);
+    });
+    return Promise.resolve(localVoters && localVoters.length > 0 ? localVoters : []);
+  }
+
+  saveVotersToLocal(voters: Voter[]): Promise<any> {
+    const votersString = JSON.stringify(voters);
+    this.localStorage.store(`voters-${this.getVotersDataKey()}`, votersString);
+    return Promise.resolve(voters && voters.length > 0 ? voters : []);
   }
 
   uploadVoters(voters: Voter[]): Promise<any> {
@@ -85,59 +99,97 @@ export class VoterService {
   saveTestData() {
     const localVoters = [
       {
-        "voterPk": 1,
-        "voterDetailPk": 1,
-        "voterId": "21200",
-        "voterName": "EshaYogi",
-        "wardNumber": null,
-        "serialNumber": null,
-        "husbandOrFatherName": "Samy",
-        "gender": "Female",
-        "age": 90,
-        "doorNumber": "X70/98",
-        "address": "Kangeyam",
-        "religion": "Hindu",
-        "boothId": "booth001",
-        "voterElectionDTOList": [
+        voterPk: 1,
+        voterDetailPk: 1,
+        voterId: '21200',
+        voterName: 'EshaYogi',
+        wardNumber: null,
+        serialNumber: null,
+        husbandOrFatherName: 'Samy',
+        gender: 'Female',
+        age: 90,
+        doorNumber: 'X70/98',
+        address: 'Kangeyam',
+        religion: 'Hindu',
+        boothId: 'booth001',
+        voterElectionDTOList: [
           {
-            "voterElectionPk": 1,
-            "electionType": "Panchayat_Councillor",
-            "votedDateTime": null,
-            "voted": false
+            voterElectionPk: 1,
+            electionType: 'Panchayat_Councillor',
+            votedDateTime: null,
+            voted: false
           },
           {
-            "voterElectionPk": 2,
-            "electionType": "Panchayat_President",
-            "votedDateTime": null,
-            "voted": false
+            voterElectionPk: 2,
+            electionType: 'Panchayat_President',
+            votedDateTime: null,
+            voted: false
           }
         ]
       },
       {
-        "voterPk": 2,
-        "voterDetailPk": 2,
-        "voterId": "31200",
-        "voterName": "Gopal",
-        "wardNumber": null,
-        "serialNumber": null,
-        "husbandOrFatherName": "Samy",
-        "gender": "Male",
-        "age": 90,
-        "doorNumber": "X70/98",
-        "address": "Kangeyam",
-        "religion": "Hindu",
-        "boothId": "booth001",
-        "voterElectionDTOList": [
+        voterPk: 2,
+        voterDetailPk: 2,
+        voterId: '31200',
+        voterName: 'Gopal',
+        wardNumber: null,
+        serialNumber: null,
+        husbandOrFatherName: 'Samy',
+        gender: 'Male',
+        age: 90,
+        doorNumber: 'X70/98',
+        address: 'Kangeyam',
+        religion: 'Hindu',
+        boothId: 'booth001',
+        voterElectionDTOList: [
           {
-            "voterElectionPk": 3,
-            "electionType": "Panchayat_Councillor",
-            "votedDateTime": null,
-            "voted": false
+            voterElectionPk: 3,
+            electionType: 'Panchayat_Councillor',
+            votedDateTime: null,
+            voted: false
           }
         ]
       }
     ];
     const localvotersString = JSON.stringify(localVoters);
     this.localStorage.store(`voters-${this.getVotersDataKey()}`, localvotersString);
+  }
+
+  fetchVoter(voterPK: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getVotersFromLocal().then((voters: Voter[]) => {
+        const voterArray = voters.filter((voter: Voter) => {
+          return voter.voterPk ? voter.voterPk === voterPK : false;
+        });
+        if (voterArray && voterArray.length > 0) {
+          const voter = voterArray[0] as Voter;
+          resolve(voter);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
+  saveVoter(voter: Voter): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getVotersFromLocal().then((localVoters: Voter[]) => {
+        const tempVoters = [];
+        const voters = localVoters.filter((voterItem: Voter, index) => {
+          if (voterItem.voterPk === voter.voterPk && voterItem.voterDetailPk === voter.voterDetailPk) {
+            voterItem = voter;
+          }
+          tempVoters.push(voterItem);
+          return true;
+        });
+        if (tempVoters && tempVoters.length > 0) {
+          this.saveVotersToLocal(tempVoters).then((savedVoters: Voter[]) => {
+            resolve(voter);
+          });
+        } else {
+          resolve(null);
+        }
+      });
+    });
   }
 }

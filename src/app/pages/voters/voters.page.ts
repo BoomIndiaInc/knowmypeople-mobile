@@ -16,19 +16,21 @@ import { FormBuilder } from '@angular/forms';
 import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 import { VoterService } from 'src/app/services/kmp/voter.service';
 import { Voter } from 'src/model/voter.model';
-
+import { Page } from 'src/app/interfaces/pages';
 @Component({
   selector: 'app-voters',
   templateUrl: './voters.page.html',
   styleUrls: ['./voters.page.scss']
 })
 export class VotersPage implements OnInit {
+  pageMenu: Page;
   searchKey = '';
   yourLocation = '123 Test Street';
   themeCover = 'assets/img/ionic4-Start-Theme-cover.jpg';
   searchPreference = null;
   voters: Voter[] = [];
   localVoters: Voter[] = [];
+  electionType: string;
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -54,6 +56,13 @@ export class VotersPage implements OnInit {
   }
 
   init() {
+    this.electionType = this.kmpUserService.getElectionType();
+    const menuId = 'voters';
+    console.log(menuId);
+    if (!!menuId) {
+      this.pageMenu = this.componentUtil.getMenuById(menuId);
+    }
+
     this.searchPreference =
       JSON.parse(this.localStorage.retrieve('voter-search-preferences')) ||
       JSON.parse(this.sessionStorage.retrieve('voter-search-preferences'));
@@ -67,6 +76,9 @@ export class VotersPage implements OnInit {
   }
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
+    this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
+      this.voters = this.localVoters = voters;
+    });
   }
 
   async onVoterSearchSettings() {

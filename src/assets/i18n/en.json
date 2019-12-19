@@ -120,7 +120,7 @@
   "SAVING_USER_DETAILS": "Saving user details ...",
   "USER_DETAILS_SAVE_SUCCESS": "User details saved successfully!",
   "USER_DETAILS_SAVE_FAIL": "Failed to update user details.",
-  "SELECT_ATLEAST_ONE_APP_SETTINGS": "Select and set atleast one application setting options (Booth, Ward, Election Type)",
+  "SELECT_ATLEAST_ONE_APP_SETTINGS": "Set election Type and set atleast one application setting option (Booth, Ward)",
   "FETCHING_VOTERS_DATA": "Fetching Voters ...",
   "ROLE_ADMIN": "Admin",
   "ROLE_USER": "User",
@@ -133,5 +133,9 @@
   "voterId" : "Voter ID",
   "voterName" : "Voter Name",
   "husbandOrFatherName" : "Husband Or Father Name",
-  "APPLY" : "Apply"
+  "APPLY" : "Apply",
+  "VOTER_DETAILS": "Voter Details",
+  "VOTE": "Vote",
+  "UN_VOTE": "Un Vote",
+  "UN_VOTE_WARNING": "Are you sure want to make unvote?"
 }
