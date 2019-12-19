@@ -7,18 +7,23 @@ import { VoterSearchCriteria, VoterElection, Voter } from './../../../model/vote
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { KmpUserService } from './user.service';
 import { CoreUtil } from 'src/app/shared/util/core-util';
+import { ComponentUtil } from 'src/app/shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VoterService {
+  isElectionDay: boolean;
   constructor(
     private http: HttpClient,
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService,
     private kmpUserService: KmpUserService,
-    private coreUtil: CoreUtil
-  ) {}
+    private coreUtil: CoreUtil,
+  ) {
+    this.isElectionDay = this.coreUtil.isTodayElectionDay();
+
+  }
 
   fetch(criteria: VoterSearchCriteria): Observable<HttpResponse<Voter>> {
     return this.http.get<Voter>(ApiService.API_URL + RETRIVE_VOTERS_REST_API_URL + '?' + this.coreUtil.generateQueryParams(criteria), {
@@ -40,12 +45,16 @@ export class VoterService {
   getVotersFromLocal(): Promise<any> {
     const localVoters = [];
     const voters: Voter[] = JSON.parse(this.localStorage.retrieve(`voters-${this.getVotersDataKey()}`)) as Voter[];
-    voters.filter((voter: Voter) => {
-      voter.voterElectionDTOList = voter.voterElectionDTOList.filter((voterElection: VoterElection) => {
-        return (voterElection.electionType === this.kmpUserService.getElectionType());
+    if (voters && voters.length > 0) {
+      voters.filter((voter: Voter) => {
+        if(this.isElectionDay) {
+          voter.voterElectionDTOList = voter.voterElectionDTOList.filter((voterElection: VoterElection) => {
+            return (voterElection.electionType === this.kmpUserService.getElectionType());
+          });
+        }
+        localVoters.push(voter);
       });
-      localVoters.push(voter);
-    });
+    }
     return Promise.resolve(localVoters && localVoters.length > 0 ? localVoters : []);
   }
 
@@ -97,60 +106,7 @@ export class VoterService {
   }
 
   saveTestData() {
-    const localVoters = [
-      {
-        voterPk: 1,
-        voterDetailPk: 1,
-        voterId: '21200',
-        voterName: 'EshaYogi',
-        wardNumber: null,
-        serialNumber: null,
-        husbandOrFatherName: 'Samy',
-        gender: 'Female',
-        age: 90,
-        doorNumber: 'X70/98',
-        address: 'Kangeyam',
-        religion: 'Hindu',
-        boothId: 'booth001',
-        voterElectionDTOList: [
-          {
-            voterElectionPk: 1,
-            electionType: 'Panchayat_Councillor',
-            votedDateTime: null,
-            voted: false
-          },
-          {
-            voterElectionPk: 2,
-            electionType: 'Panchayat_President',
-            votedDateTime: null,
-            voted: false
-          }
-        ]
-      },
-      {
-        voterPk: 2,
-        voterDetailPk: 2,
-        voterId: '31200',
-        voterName: 'Gopal',
-        wardNumber: null,
-        serialNumber: null,
-        husbandOrFatherName: 'Samy',
-        gender: 'Male',
-        age: 90,
-        doorNumber: 'X70/98',
-        address: 'Kangeyam',
-        religion: 'Hindu',
-        boothId: 'booth001',
-        voterElectionDTOList: [
-          {
-            voterElectionPk: 3,
-            electionType: 'Panchayat_Councillor',
-            votedDateTime: null,
-            voted: false
-          }
-        ]
-      }
-    ];
+    const localVoters = [{"voterPk":34,"voterDetailPk":36,"voterId":"V1","voterName":"Ragu Ramji D","serialNumber":null,"husbandOrFatherName":"H1","gender":"Male","age":29,"doorNumber":"10","address":"Modacuruchi","religion":"Hindu","locationCoordinates":"11.234433,77.7784062","imageUrl":null,"caste":"Caste1","community":"Community1","occupation":"Farmer","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":56,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":true},{"voterElectionPk":57,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false}]},{"voterPk":35,"voterDetailPk":37,"voterId":"V2","voterName":"Gowdham","serialNumber":null,"husbandOrFatherName":"G1","gender":"Male","age":32,"doorNumber":"11","address":"Modacuruchi","religion":"Hindu","locationCoordinates":"11.23346019,77.78039971","imageUrl":null,"caste":"Caste2","community":"Community1","occupation":"Farmer","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":58,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false},{"voterElectionPk":59,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false}]},{"voterPk":36,"voterDetailPk":38,"voterId":"V3","voterName":"Syed","serialNumber":null,"husbandOrFatherName":"S1","gender":"Male","age":33,"doorNumber":"12","address":"Modacuruchi","religion":"Muslim","locationCoordinates":"11.23295508,77.78220216","imageUrl":null,"caste":"Caste2","community":"Community2","occupation":"Store keeper","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":60,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false},{"voterElectionPk":61,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth1","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false}]},{"voterPk":37,"voterDetailPk":39,"voterId":"V4","voterName":"Peter","serialNumber":null,"husbandOrFatherName":"A1","gender":"Male","age":40,"doorNumber":"12","address":"Modacuruchi","religion":"Christian","locationCoordinates":"11.23451252,77.78387586","imageUrl":null,"caste":"Caste3","community":"Community2","occupation":"Software Engineer","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":62,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth2","wardNumber":"ward2","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false}]},{"voterPk":38,"voterDetailPk":40,"voterId":"V5","voterName":"Khan","serialNumber":null,"husbandOrFatherName":"V1","gender":"Male","age":20,"doorNumber":"12","address":"Modacuruchi","religion":"Muslim","locationCoordinates":"11.23741692,77.78374711","imageUrl":null,"caste":"Caste3","community":"Community2","occupation":"Farmer","maritalStatus":false,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":63,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth2","wardNumber":"ward2","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false},{"voterElectionPk":64,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth2","wardNumber":"ward1","memberOfParty":"ADMK","votingChance":"ADMK","votedDateTime":null,"voted":false}]},{"voterPk":39,"voterDetailPk":41,"voterId":"V6","voterName":"Kamal","serialNumber":null,"husbandOrFatherName":"W1","gender":"Male","age":20,"doorNumber":"15","address":"Modacuruchi","religion":"Hindu","locationCoordinates":"11.24053176,77.78340379","imageUrl":null,"caste":"Caste2","community":"Community2","occupation":"Mechanic","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":65,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward3","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":false},{"voterElectionPk":66,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth1","wardNumber":"ward3","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":false}]},{"voterPk":40,"voterDetailPk":42,"voterId":"V7","voterName":"Vishnu","serialNumber":null,"husbandOrFatherName":"W1","gender":"Male","age":20,"doorNumber":"15","address":"Modacuruchi","religion":"Hindu","locationCoordinates":"11.24154197, 77.7851204","imageUrl":null,"caste":"Caste1","community":"Community1","occupation":"Teacher","maritalStatus":true,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":67,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward3","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":false},{"voterElectionPk":68,"electionType":"corporaton Election","electionId":"corporaton","boothId":"Booth1","wardNumber":"ward3","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":false}]},{"voterPk":41,"voterDetailPk":43,"voterId":"V8","voterName":"Robert","serialNumber":null,"husbandOrFatherName":"W1","gender":"Male","age":20,"doorNumber":"15","address":"Modacuruchi","religion":"Christian","locationCoordinates":"11.24154197, 77.7851204","imageUrl":null,"caste":"Caste1","community":"Community1","occupation":"Teacher","maritalStatus":false,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":69,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth2","wardNumber":"ward3","memberOfParty":"PMK","votingChance":"PMK","votedDateTime":null,"voted":false}]},{"voterPk":42,"voterDetailPk":44,"voterId":"V9","voterName":"Robert","serialNumber":null,"husbandOrFatherName":"Q1","gender":"Male","age":28,"doorNumber":"15","address":"Modacuruchi","religion":"Buddhist","locationCoordinates":"11.24403015,77.78470516","imageUrl":null,"caste":"Caste1","community":"Community3","occupation":"Saint","maritalStatus":false,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":70,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth2","wardNumber":"ward3","memberOfParty":"DMK","votingChance":"DMK","votedDateTime":null,"voted":false}]},{"voterPk":43,"voterDetailPk":45,"voterId":"V10","voterName":"Mohammad","serialNumber":null,"husbandOrFatherName":"W1","gender":"Male","age":20,"doorNumber":"15","address":"Modacuruchi","religion":"Muslim","locationCoordinates":"11.24474571,77.78590679","imageUrl":null,"caste":"Caste1","community":"Community2","occupation":"Social Worker","maritalStatus":false,"speciallyAbled":false,"village":"Modacuruchi","district":"Erode","mlaConstituency":"Modacuruchi","mpConstituency":"Erode","voterElectionDTOList":[{"voterElectionPk":71,"electionType":"panchayat Election","electionId":"panchayat","boothId":"Booth1","wardNumber":"ward3","memberOfParty":"DMK","votingChance":"DMK","votedDateTime":null,"voted":false}]}];
     const localvotersString = JSON.stringify(localVoters);
     this.localStorage.store(`voters-${this.getVotersDataKey()}`, localvotersString);
   }

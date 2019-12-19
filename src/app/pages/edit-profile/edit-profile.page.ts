@@ -43,7 +43,7 @@ export class EditProfilePage implements OnInit {
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService,
     private resolverService: PropertyResolverService,
-    public formBuilder: FormBuilder,
+    public formBuilder: FormBuilder
   ) {
     const menuId = 'edit-profile';
     console.log(menuId);
@@ -83,32 +83,30 @@ export class EditProfilePage implements OnInit {
       }
     });
   }
-  onEdit() {
-
+  onSave() {
     this.componentUtil.showLoading(() => {
       const userIdentity = this.kmpUserService.getUserIdentity();
       const profileFormValues = this.profileForm.getRawValue();
-      const finalUserIdentity = {...userIdentity, ...profileFormValues};
-      
-      this.kmpUserService.save(finalUserIdentity)
-      .toPromise()
-      .then(response => {
-        const user = response.body;
-        if (user) {
-          this.componentUtil.hideLoading();
-          this.componentUtil.showToast('USER_DETAILS_SAVE_SUCCESS', { cssClass: 'toast-success'});
-        } else {
-          this.componentUtil.hideLoading();
-          this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail'});
+      const finalUserIdentity = { ...userIdentity, ...profileFormValues };
 
-        }
-      })
-      .catch(err => {
-        // error
-        this.componentUtil.hideLoading();
-        this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail'});
-
-      });
-    }, 'SAVING_USER_DETAILS');    
+      this.kmpUserService
+        .save(finalUserIdentity)
+        .toPromise()
+        .then(response => {
+          const user = response.body;
+          if (user) {
+            this.componentUtil.hideLoading();
+            this.componentUtil.showToast('USER_DETAILS_SAVE_SUCCESS', { cssClass: 'toast-success' });
+          } else {
+            this.componentUtil.hideLoading();
+            this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail' });
+          }
+        })
+        .catch(err => {
+          // error
+          this.componentUtil.hideLoading();
+          this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail' });
+        });
+    }, 'SAVING_USER_DETAILS');
   }
 }

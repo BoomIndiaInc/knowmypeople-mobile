@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PropertyResolverService } from 'src/app/services/property-resolver/property-resolver.service';
 
 declare var window: any;
 
@@ -7,7 +8,7 @@ declare var window: any;
   })
 
 export class CoreUtil {
-  constructor() {}
+  constructor(private resolverService: PropertyResolverService) {}
 
   //
   // Handy method to detect if we run on localhost
@@ -37,5 +38,10 @@ export class CoreUtil {
       }
     }
     return params.toString();
+  }
+
+  isTodayElectionDay() {
+    const electionDate = this.resolverService.getPropertyValue('active-election-date');
+    return (new Date().toISOString().split('T')[0] === electionDate);
   }
 }
