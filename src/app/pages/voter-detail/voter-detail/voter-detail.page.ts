@@ -175,6 +175,7 @@ export class VoterDetailPage implements OnInit {
   onEditImage() {
     this.cameraService.selectImage().then((data) => {
       this.voter.imageUrl = data;
+      this.voterForm.patchValue({imageUrl: this.voter.imageUrl});
     });
   }
 }

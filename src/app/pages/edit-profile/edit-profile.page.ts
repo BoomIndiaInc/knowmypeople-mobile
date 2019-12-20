@@ -64,7 +64,8 @@ export class EditProfilePage implements OnInit {
       lastName: [this.lastName],
       emailId: [this.emailId],
       mobileNumber: [this.mobileNumber],
-      userType: [this.userType]
+      userType: [this.userType],
+      imageUrl: [this.userImageUrl]
     });
   }
 
@@ -115,6 +116,7 @@ export class EditProfilePage implements OnInit {
   onEditImage() {
     this.cameraService.selectImage().then((data) => {
       this.userImageUrl = data;
+      this.profileForm.patchValue({imageUrl: this.userImageUrl});
     });
   }
 }
