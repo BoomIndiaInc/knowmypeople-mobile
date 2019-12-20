@@ -40,8 +40,8 @@ export class LoginPage implements OnInit {
     private kmpUserService: KmpUserService
   ) {
     this.loginForm = formBuilder.group({
-      username: ['test', Validators.required],
-      password: ['test', Validators.compose([Validators.minLength(4), Validators.required])],
+      username: ['admin', Validators.required],
+      password: ['Boom123#', Validators.compose([Validators.minLength(4), Validators.required])],
       rememberMe: [true, Validators.required]
     });
   }
@@ -62,18 +62,15 @@ export class LoginPage implements OnInit {
   onLogin() {
     this.componentUtil.showLoading(() => {
       this.loginService.login(this.loginForm.value).then(
-        () => {
-          this.kmpUserService.identity(true).then(kmpUser => {
+        (account) => {
+          if (account !== null) {
             this.componentUtil.hideLoading();
-            // After the login the language will be changed to
-            // the language selected by the user during his registration
-            if (kmpUser !== null) {
-              this.goToHome();
-            } else {
-              this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true }, true);
-              this.componentUtil.userLogout();
-            }
-          });
+            this.goToHome();
+          } else {
+            this.componentUtil.hideLoading();
+            this.componentUtil.showToast(this.loginErrorString, { cssClass: 'toast-fail', duration: 5000, showCloseButton: true }, true);
+            this.componentUtil.userLogout();
+          }
         },
         async err => {
           // Unable to log in

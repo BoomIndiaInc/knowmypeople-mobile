@@ -42,6 +42,6 @@ export class CoreUtil {
 
   isTodayElectionDay() {
     const electionDate = this.resolverService.getPropertyValue('active-election-date');
-    return (new Date().toISOString().split('T')[0] === electionDate);
+    return (new Date().toISOString().split('T')[0] === electionDate.split('T')[0]);
   }
 }

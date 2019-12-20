@@ -46,7 +46,7 @@ export class LoginService { // extends BaseService{
           if (account !== null) {
             this.translate.use(account.langKey);
           }
-          resolve(data);
+          resolve(account);
         });
         return callback();
       },

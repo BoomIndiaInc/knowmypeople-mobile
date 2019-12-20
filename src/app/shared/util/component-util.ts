@@ -108,7 +108,7 @@ export class ComponentUtil {
   ) {}
 
   showLoading(completeCallBack, message?, dismissCallBack?) {
-    if (this.loading) return;
+    if (this.loading) { return; }
     const translatedMessage = !!message ? this.translateService.instant(message) : this.translateService.instant('PLEASE_WAIT');
     this.loadingCtrl
       .create({
@@ -117,9 +117,9 @@ export class ComponentUtil {
       .then(loading => {
         this.loading = loading;
         this.loading.present();
-        if (completeCallBack) return completeCallBack();
+        if (completeCallBack) { return completeCallBack(); }
         this.loading.onDidDismiss().then(dis => {
-          if (dismissCallBack) return dismissCallBack();
+          if (dismissCallBack) { return dismissCallBack(); }
         });
       });
   }

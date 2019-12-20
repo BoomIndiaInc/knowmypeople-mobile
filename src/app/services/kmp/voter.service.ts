@@ -47,7 +47,7 @@ export class VoterService {
     const voters: Voter[] = JSON.parse(this.localStorage.retrieve(`voters-${this.getVotersDataKey()}`)) as Voter[];
     if (voters && voters.length > 0) {
       voters.filter((voter: Voter) => {
-        if(this.isElectionDay) {
+        if(!this.isElectionDay) {
           voter.voterElectionDTOList = voter.voterElectionDTOList.filter((voterElection: VoterElection) => {
             return (voterElection.electionType === this.kmpUserService.getElectionType());
           });

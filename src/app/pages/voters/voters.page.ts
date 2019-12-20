@@ -17,6 +17,7 @@ import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 import { VoterService } from 'src/app/services/kmp/voter.service';
 import { Voter } from 'src/model/voter.model';
 import { Page } from 'src/app/interfaces/pages';
+import { CoreUtil } from 'src/app/shared/util/core-util';
 @Component({
   selector: 'app-voters',
   templateUrl: './voters.page.html',
@@ -31,6 +32,7 @@ export class VotersPage implements OnInit {
   voters: Voter[] = [];
   localVoters: Voter[] = [];
   electionType: string;
+  isElectionDay: boolean;
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -38,7 +40,7 @@ export class VotersPage implements OnInit {
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
-
+    private coreUtil: CoreUtil,
     private componentUtil: ComponentUtil,
     private route: ActivatedRoute,
     private router: Router,
@@ -73,6 +75,7 @@ export class VotersPage implements OnInit {
       voterName: !this.searchPreference ? true : this.searchPreference.voterName ? true : false,
       husbandOrFatherName: !this.searchPreference ? true : this.searchPreference.husbandOrFatherName ? true : false
     };
+    this.isElectionDay = this.coreUtil.isTodayElectionDay();
   }
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
@@ -108,11 +111,12 @@ export class VotersPage implements OnInit {
 
 
   matchAvailabilityCheck(searchTerm, voter: Voter) {
+
     const searchAvailableConfig = {
       serialNumber: voter.serialNumber ? voter.serialNumber.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
       voterId: voter.voterId ? voter.voterId.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
       voterName: voter.voterName ? voter.voterName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
-      husbandOrFatherNamevoter: voter.husbandOrFatherName
+      husbandOrFatherName: voter.husbandOrFatherName
         ? voter.husbandOrFatherName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
         : false
     };
@@ -135,10 +139,7 @@ export class VotersPage implements OnInit {
   }
 
   filterVoters(searchTerm) {
-    if (!!!searchTerm) {
-      return this.localVoters;
-    }
-    return this.voters.filter((voter: Voter) => {
+    return this.localVoters.filter((voter: Voter) => {
       return this.matchAvailabilityCheck(searchTerm, voter);
     });
   }
