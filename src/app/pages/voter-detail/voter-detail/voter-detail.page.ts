@@ -9,7 +9,7 @@ import { NavController } from '@ionic/angular';
 import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CoreUtil } from 'src/app/shared/util/core-util';
-
+import { GeoLocationService } from 'src/app/services/geo-location/geo-location.service';
 
 @Component({
   selector: 'app-voter-detail',
@@ -31,7 +31,8 @@ export class VoterDetailPage implements OnInit {
     private kmpUserService: KmpUserService,
     private navCtrl: NavController,
     private syncDataService: SyncDataService,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private geoLocationService: GeoLocationService
   ) {
     const menuId = 'voter-details';
     console.log(menuId);
@@ -73,12 +74,10 @@ export class VoterDetailPage implements OnInit {
         community: [this.voter.community],
         religion: [this.voter.religion],
 
-
         boothId: [this.voter.boothId],
         wardNumber: [this.voter.wardNumber],
         mlaConstituency: [this.voter.mlaConstituency],
         mpConstituency: [this.voter.mpConstituency],
-
 
         speciallyAbled: [this.voter.speciallyAbled],
         imageUrl: [this.voter.imageUrl],
@@ -88,13 +87,54 @@ export class VoterDetailPage implements OnInit {
         locationCoordinates: [this.voter.locationCoordinates],
         village: [this.voter.village],
         district: [this.voter.district]
-
       });
     });
     this.isElectionDay = this.coreUtil.isTodayElectionDay();
   }
 
-  onLocation() {}
+  onLocation() {
+    // this.componentUtil.showLoading(() => {
+    // this.geoLocationService.getCurrentCoordinateAddress(11.23295508, 77.78220216).then(
+    //   address => {
+    //     // this.voterForm.patchValue({ locationCoordinates: null });
+    //     this.componentUtil.hideLoading();
+    //   },
+    //   error => {
+    //     console.log(error);
+    //     this.componentUtil.showToast(error, true);
+    //     this.componentUtil.hideLoading();
+    //   }
+    // );
+    // });
+
+    // return;
+    this.componentUtil.showLoading(() => {
+      this.geoLocationService.getCurrentCoordinates().then(
+        coordinates => {
+          console.log(coordinates);
+          const latitude = coordinates.latitude;
+          const longitude = coordinates.longitude;
+          this.voterForm.patchValue({ locationCoordinates: `${latitude},${longitude}` });
+          this.geoLocationService.getCurrentCoordinateAddress(11.23295508, 77.78220216).then(
+            address => {
+              // this.voterForm.patchValue({ locationCoordinates: null });
+              this.componentUtil.hideLoading();
+            },
+            error => {
+              console.log(error);
+              this.componentUtil.showToast(error, true);
+              this.componentUtil.hideLoading();
+            }
+          );
+        },
+        error => {
+          this.voterForm.patchValue({ locationCoordinates: null });
+          this.componentUtil.showToast(error, true);
+          this.componentUtil.hideLoading();
+        }
+      );
+    }, 'FETCHING_LOCATION_DATA');
+  }
 
   onVoteOrUnVote(isVoted: boolean) {
     this.voter.voterElectionDTOList.forEach((voterElection: VoterElection) => {
@@ -123,7 +163,7 @@ export class VoterDetailPage implements OnInit {
   onSave(voter: Voter = this.voter) {
     console.log(this.voter);
     console.log(this.voterForm.getRawValue());
-    const finalVoter = {...this.voter, ...this.voterForm.getRawValue()};
+    const finalVoter = { ...this.voter, ...this.voterForm.getRawValue() };
     this.voterService.saveVoter(finalVoter).then(savedVoter => {
       console.log('Voter Saved Locally!');
       this.navCtrl.navigateBack(['/voters']);

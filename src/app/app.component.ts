@@ -52,11 +52,13 @@ export class AppComponent {
   /**
    * Called when this component is being initialized.
    */
+  // tslint:disable-next-line:use-lifecycle-interface
   ngOnInit(): void {}
 
   /**
    * Use this to clean up any subscriptions etc.
    */
+  // tslint:disable-next-line:use-lifecycle-interface
   ngOnDestroy(): void {
     this.networkService.unsubscribe();
   }
@@ -102,7 +104,7 @@ export class AppComponent {
     this.appService.appConfig().subscribe(
       response => {
         this.resolverService.allProperties = response.body;
-        this.initializeApp(response);
+        this.initializeApp(this.resolverService.allProperties || response.body);
       },
       async response => {
         // Unable to fetch app configurations
@@ -131,6 +133,7 @@ export class AppComponent {
       .then(() => {
         this.statusBar.styleDefault();
         this.componentUtil.hideLoading();
+        this.networkService.subscribe();
       })
       .catch(() => {});
   }

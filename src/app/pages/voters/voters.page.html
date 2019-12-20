@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar color="primary">
       <ion-buttons slot="start">
-        <ion-menu-button *ngIf="pageMenu?.direct === 'root'" color="light"></ion-menu-button>
+        <ion-menu-button color="light"></ion-menu-button> <!-- *ngIf="pageMenu?.direct === 'root'"  -->
       <ion-back-button *ngIf="pageMenu?.direct === 'forward'" color="light"></ion-back-button>
       </ion-buttons>
       <ion-title>{{pageMenu?.title | translate}}</ion-title>
@@ -21,7 +21,7 @@
     <ion-list>
       <ion-item *ngFor="let voter of voters;" [routerLink]="voter.voterPk">
         <ion-avatar slot="start">
-          <img *ngIf="voter.imageUrl; else defaultUserIcon" style="background: #000000;" [src]="voter.imageUrl">
+          <img *ngIf="voter.imageUrl; else defaultUserIcon" style="background: #000000;" [src]="'data:image/jpeg;base64,'+voter.imageUrl">
     
           <ng-template #defaultUserIcon>
             <ion-icon name="contact"></ion-icon> 

@@ -102,5 +102,9 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.2" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.2" />
+    <plugin name="cordova-plugin-nativegeocoder" spec="^3.2.2" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-camera" spec="^4.1.0" />
+    <plugin name="cordova-plugin-file" spec="^6.0.2" />
 </widget>

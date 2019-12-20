@@ -70,7 +70,7 @@ export class SettingsPage implements OnInit {
 
     this.userName = this.kmpUserService.getUserName();
     this.userType = this.kmpUserService.getUserType();
-    this.userImageUrl = this.accountService.getImageUrl();
+    this.userImageUrl = this.kmpUserService.getImageUrl();
     this.userBoothId = this.kmpUserService.getBoothId();
     this.userElectionType = this.kmpUserService.getElectionType();
     this.userWardId = this.kmpUserService.getWardId();

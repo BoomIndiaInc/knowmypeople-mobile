@@ -83,7 +83,7 @@ export class VoterService {
 
   fetchVoters(boothId, wardId, electionType): Promise<any> {
     // test
-    this.saveTestData();
+    // this.saveTestData();
     const criteria = new VoterSearchCriteria(boothId, electionType, wardId);
     return this.fetch(criteria)
       .toPromise()

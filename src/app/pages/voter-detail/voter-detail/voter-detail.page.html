@@ -41,7 +41,7 @@
 
   <ion-card class="voter-image-card ion-no-margin">
     <ion-card-content class="bg-profile">
-      <img *ngIf="voter.imageUrl; else defaultUserIcon" [src]="voter.imageUrl">
+      <img *ngIf="voter.imageUrl; else defaultUserIcon" [src]="'data:image/jpeg;base64,'+ voter.imageUrl">
       <ng-template #defaultUserIcon>
         <ion-icon class="profile-image" name="contact"></ion-icon>
       </ng-template>

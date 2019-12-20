@@ -27,6 +27,10 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { ApplicationPreStartupService } from './services/hook/application-pre-startup.service';
 import { Network } from '@ionic-native/network/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder} from '@ionic-native/native-geocoder/ngx';
+import { Camera } from '@ionic-native/Camera/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -89,7 +93,11 @@ export function preStartupHandler(applicationPreStartupService: ApplicationPreSt
       multi: true
     },
     AuthServerProvider,
-    Network
+    Network,
+    Geolocation,
+    NativeGeocoder,
+    Camera,
+    File
   ],
   bootstrap: [AppComponent]
 })
