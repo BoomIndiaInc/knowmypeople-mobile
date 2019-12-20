@@ -109,7 +109,6 @@ export class VotersPage implements OnInit {
     this.navCtrl.navigateForward('settings');
   }
 
-
   matchAvailabilityCheck(searchTerm, voter: Voter) {
 
     const searchAvailableConfig = {
@@ -120,22 +119,13 @@ export class VotersPage implements OnInit {
         ? voter.husbandOrFatherName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
         : false
     };
-    const searchPreferenceConfig = Object.assign(this.searchPreference);
-    const voterSearchPreferenceKeys: string[] = Object.keys(this.searchPreference);
-    voterSearchPreferenceKeys.forEach(key => {
-      if (!this.searchPreference[key]) {
-        delete searchPreferenceConfig[key];
-      }
-    });
-    const searchPreferenceConfigKeys: string[] = Object.keys(searchPreferenceConfig);
-    let isSearchMatchAvaialble = false;
-    for (const key of searchPreferenceConfigKeys) {
-      if (searchAvailableConfig[key]) {
-        isSearchMatchAvaialble = true;
-        break;
-      }
-    }
-    return isSearchMatchAvaialble;
+    const isMatching =
+      searchAvailableConfig.serialNumber ||
+      searchAvailableConfig.voterId ||
+      searchAvailableConfig.voterName ||
+      searchAvailableConfig.husbandOrFatherName;
+    console.log(isMatching);
+    return isMatching;
   }
 
   filterVoters(searchTerm) {
@@ -151,7 +141,6 @@ export class VotersPage implements OnInit {
   }
 
   setFilteredItems(event) {
-
     const val = event.target.value;
     this.voters = this.filterVoters(val);
   }
