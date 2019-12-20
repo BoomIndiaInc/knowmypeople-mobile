@@ -1,0 +1,3 @@
+3. Implement Base 64 Image for user imageUrl
+4. Image selection form mobile/local cordova plugin
+5. Settings Page , force Booth, Ward and Election Type selection for user

@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light" *ngIf="showMenuOption()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{pageMenu?.title | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="bg-profile">
+    <ion-avatar slot="start" class="user-avatar">
+      <img *ngIf="userImageUrl; else defaultUserIcon" class="user-image" [src]="'assets/img/avatar.png'">
+
+      <ng-template #defaultUserIcon>
+        <ion-icon name="contact"></ion-icon>
+      </ng-template>
+    </ion-avatar>
+    <ion-label>
+      <ion-text color="light">
+        <h2 style="text-transform: capitalize">
+          <strong>{{userName}}</strong>
+        </h2>
+      </ion-text>
+      <ion-text color="secondary">
+        <h3>
+          {{userType | translate}}
+        </h3>
+      </ion-text>
+      <ion-button icon-left size="small" shape="round" color="dark" (click)="editProfile()">
+        <ion-icon name="contact"></ion-icon>
+        {{'SETTINGS_PAGE_PROFILE'| translate}}
+      </ion-button>
+      <ion-button icon-left size="small" shape="round" color="secondary" (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+        {{'LOGOUT_TITLE'| translate}}
+      </ion-button>
+    </ion-label>
+  </ion-item>
+  <form [formGroup]="settingsForm">
+  <ion-list no-border>
+    
+    <ion-list-header>
+      <ion-text color="dark">
+        <h5>{{'GENERAL'| translate}}</h5>
+      </ion-text>
+    </ion-list-header>
+    
+    <ion-item>
+      <ion-icon name="cog" slot="start" [color]="settingsForm?.getRawValue()?.language ? 'primary': 'dark'"></ion-icon>
+      <ion-label color="primary">{{'APP_LANGUAGE'| translate}}</ion-label>
+      <ion-select formControlName="language"  name="language" [selectedText]="language" (ionChange)="languageSelected($event)">
+        <ion-select-option *ngFor="let language of languages" [value]="language">{{language | translate}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="sync" slot="start" [color]="settingsForm?.getRawValue()?.autoSync ? 'primary': 'dark'"></ion-icon>
+      <ion-label class="label" color="primary"> {{'ENABLE_AUTO_SYNC'| translate}} </ion-label>
+      <ion-toggle formControlName="autoSync"  name="autoSync" (ionChange)="syncSelected($event)"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="!enableAutoSync">
+      <ion-button slot="end" class="sync-local-data-btn" expand="block" (click)="syncLocalData()">
+        <ion-icon slot="icon-only" name="sync"></ion-icon>
+        {{'SYNC_LOCAL_DATA'| translate}}
+      </ion-button>
+    </ion-item>
+
+  </ion-list>
+  <ion-list >
+    <ion-list-header>
+      <ion-text color="dark">
+        <h5>{{'APPLICATION'| translate}}</h5>
+      </ion-text>
+    </ion-list-header>
+    
+    <ion-item *ngIf="booths">
+      <ion-icon name="albums" slot="start" [color]="settingsForm?.getRawValue()?.boothId ? 'primary': 'dark'"></ion-icon>
+      <ion-label color="primary">{{'BOOTH'| translate}}</ion-label>
+      <ion-select formControlName="boothId"  name="boothId" [selectedText]="userBoothId" (ionChange)="boothSelected($event)">
+        <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+        <ion-select-option *ngFor="let booth of booths" [value]="booth">{{booth}}</ion-select-option>
+        
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="wards">
+      <ion-icon name="cube" slot="start" [color]="settingsForm?.getRawValue()?.wardId ? 'primary': 'dark'"></ion-icon>
+      <ion-label color="primary">{{'WARD'| translate}} </ion-label>
+      <ion-select formControlName="wardId"  name="wardId" [selectedText]="userWardId" (ionChange)="wardSelected($event)">
+          <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+        <ion-select-option *ngFor="let ward of wards" [value]="ward">{{ward}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="electionTypes">
+      <ion-icon name="archive" slot="start" [color]="settingsForm?.getRawValue()?.electionType ? 'primary': 'dark'"></ion-icon>
+      <ion-label color="primary">{{'ELECTION_TYPE'| translate}}</ion-label>
+      <ion-select formControlName="electionType"  name="electionType" [selectedText]="userElectionType" (ionChange)="electionTypeSelected($event)">
+          <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+        <ion-select-option *ngFor="let electionType of electionTypes" [value]="electionType">{{electionType}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+</form>
+</ion-content>

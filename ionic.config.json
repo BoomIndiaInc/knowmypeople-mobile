@@ -1,0 +1,7 @@
+{
+  "name": "knowmypeople-mobile",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

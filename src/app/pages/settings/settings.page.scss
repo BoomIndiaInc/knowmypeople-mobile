@@ -1,0 +1,22 @@
+:host {
+  ion-content {
+    --background: linear-gradient(-135deg, var(--ion-color-medium), var(--ion-color-light))
+  }
+}
+
+ion-avatar {
+    width: 68px;
+    height: 68px;
+    color: white;
+}
+
+ion-avatar{
+  ion-icon{
+      width: 100%;
+      height: 100%;
+      color: white;
+  }
+}
+.sync-local-data-btn{
+  float: right;
+}
