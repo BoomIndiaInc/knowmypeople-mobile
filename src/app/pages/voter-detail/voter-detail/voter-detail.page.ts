@@ -10,6 +10,7 @@ import { SyncDataService } from 'src/app/services/kmp/sync-data.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CoreUtil } from 'src/app/shared/util/core-util';
 import { GeoLocationService } from 'src/app/services/geo-location/geo-location.service';
+import { CameraService } from 'src/app/services/camera/camera.service';
 
 @Component({
   selector: 'app-voter-detail',
@@ -32,7 +33,8 @@ export class VoterDetailPage implements OnInit {
     private navCtrl: NavController,
     private syncDataService: SyncDataService,
     public formBuilder: FormBuilder,
-    private geoLocationService: GeoLocationService
+    private geoLocationService: GeoLocationService,
+    public cameraService: CameraService
   ) {
     const menuId = 'voter-details';
     console.log(menuId);
@@ -167,6 +169,12 @@ export class VoterDetailPage implements OnInit {
     this.voterService.saveVoter(finalVoter).then(savedVoter => {
       console.log('Voter Saved Locally!');
       this.navCtrl.navigateBack(['/voters']);
+    });
+  }
+
+  onEditImage() {
+    this.cameraService.selectImage().then((data) => {
+      this.voter.imageUrl = data;
     });
   }
 }

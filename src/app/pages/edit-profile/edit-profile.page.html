@@ -11,7 +11,7 @@
 <ion-content class="profile">
   <ion-card class="ion-no-margin">
     <ion-card-content class="bg-profile">
-      <img *ngIf="userImageUrl; else defaultUserIcon" src="assets/img/avatar.png">
+      <img *ngIf="userImageUrl; else defaultUserIcon" [src]="'data:image/jpeg;base64,'+ userImageUrl">
       <ng-template #defaultUserIcon>
           <ion-icon class="profile-image" name="contact"></ion-icon>
         </ng-template>
@@ -21,7 +21,7 @@
             {{userType | translate}}
           </h3>
       </ion-text>
-      <ion-button icon-left color="secondary">
+      <ion-button icon-left color="secondary" (click)="onEditImage()">
         <ion-icon name="photos"></ion-icon> 
         {{'EDIT_OR_ADD_AVATAR' | translate}} 
       </ion-button>

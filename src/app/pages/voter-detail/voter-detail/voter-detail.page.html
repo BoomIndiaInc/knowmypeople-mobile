@@ -51,7 +51,7 @@
           {{voter.husbandOrFatherName | translate}}
         </h3>
       </ion-text>
-      <ion-button icon-left color="secondary" *ngIf="!isElectionDay">
+      <ion-button icon-left color="secondary" *ngIf="!isElectionDay" (click)="onEditImage()">
         <ion-icon name="photos"></ion-icon>
         {{'EDIT_OR_ADD_AVATAR' | translate}}
       </ion-button>

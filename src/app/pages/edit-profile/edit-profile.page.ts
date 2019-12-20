@@ -11,6 +11,7 @@ import { PropertyResolverService } from 'src/app/services/property-resolver/prop
 import { KmpService } from 'src/app/services/kmp/kmp.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { User } from 'src/model/user.model';
+import { CameraService } from 'src/app/services/camera/camera.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -43,7 +44,8 @@ export class EditProfilePage implements OnInit {
     private localStorage: LocalStorageService,
     private sessionStorage: SessionStorageService,
     private resolverService: PropertyResolverService,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    public cameraService: CameraService
   ) {
     const menuId = 'edit-profile';
     console.log(menuId);
@@ -108,5 +110,11 @@ export class EditProfilePage implements OnInit {
           this.componentUtil.showToast('USER_DETAILS_SAVE_FAIL', { cssClass: 'toast-fail' });
         });
     }, 'SAVING_USER_DETAILS');
+  }
+
+  onEditImage() {
+    this.cameraService.selectImage().then((data) => {
+      this.userImageUrl = data;
+    });
   }
 }
