@@ -4,21 +4,17 @@ import { PropertyResolverService } from 'src/app/services/property-resolver/prop
 declare var window: any;
 
 @Injectable({
-    providedIn: 'root'
-  })
-
+  providedIn: 'root'
+})
 export class CoreUtil {
+  elections: any[];
   constructor(private resolverService: PropertyResolverService) {}
 
   //
   // Handy method to detect if we run on localhost
   //
   public isRunningOnLocalhost(theUrl): boolean {
-    return (
-      (theUrl.indexOf('://localhost') >= 0 ||
-        theUrl.indexOf('127.0.0.1') >= 0) &&
-      theUrl.indexOf(':8990') < 0
-    );
+    return (theUrl.indexOf('://localhost') >= 0 || theUrl.indexOf('127.0.0.1') >= 0) && theUrl.indexOf(':8990') < 0;
   }
 
   //
@@ -38,10 +34,5 @@ export class CoreUtil {
       }
     }
     return params.toString();
-  }
-
-  isTodayElectionDay() {
-    const electionDate = this.resolverService.getPropertyValue('active-election-date');
-    return (new Date().toISOString().split('T')[0] === electionDate.split('T')[0]);
   }
 }

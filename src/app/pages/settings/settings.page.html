@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button color="light" *ngIf="showMenuOption()"></ion-menu-button> <!-- *ngIf="pageMenu?.direct === 'root'"  -->
+      <ion-menu-button color="light" ></ion-menu-button> <!-- *ngIf="pageMenu?.direct === 'root'"  -->
     </ion-buttons>
     <ion-title>{{pageMenu?.title | translate}}</ion-title>
   </ion-toolbar>
@@ -77,7 +77,7 @@
       <ion-icon name="albums" slot="start" [color]="settingsForm?.getRawValue()?.boothId ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'BOOTH'| translate}}</ion-label>
       <ion-select formControlName="boothId"  name="boothId" [selectedText]="userBoothId" (ionChange)="boothSelected($event)">
-        <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+        <ion-select-option [value]="nullValue">{{'ALL' | translate}}</ion-select-option>
         <ion-select-option *ngFor="let booth of booths" [value]="booth">{{booth}}</ion-select-option>
         
       </ion-select>
@@ -87,7 +87,7 @@
       <ion-icon name="cube" slot="start" [color]="settingsForm?.getRawValue()?.wardId ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'WARD'| translate}} </ion-label>
       <ion-select formControlName="wardId"  name="wardId" [selectedText]="userWardId" (ionChange)="wardSelected($event)">
-          <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+          <ion-select-option [value]="nullValue">{{'ALL' | translate}}</ion-select-option>
         <ion-select-option *ngFor="let ward of wards" [value]="ward">{{ward}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -96,7 +96,7 @@
       <ion-icon name="archive" slot="start" [color]="settingsForm?.getRawValue()?.electionType ? 'primary': 'dark'"></ion-icon>
       <ion-label color="primary">{{'ELECTION_TYPE'| translate}}</ion-label>
       <ion-select formControlName="electionType"  name="electionType" [selectedText]="userElectionType" (ionChange)="electionTypeSelected($event)">
-          <ion-select-option [value]="nullValue">{{'NONE' | translate}}</ion-select-option>
+          <ion-select-option [value]="nullValue">{{'ALL' | translate}}</ion-select-option>
         <ion-select-option *ngFor="let electionType of electionTypes" [value]="electionType">{{electionType}}
         </ion-select-option>
       </ion-select>

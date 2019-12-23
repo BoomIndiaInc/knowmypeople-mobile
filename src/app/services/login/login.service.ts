@@ -4,7 +4,7 @@ import { AccountService } from '../auth/account.service';
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { NetworkService } from '../network/network.service';
-import { BaseService } from '../base.service';
+import { KmpUserService } from '../kmp/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ import { BaseService } from '../base.service';
 export class LoginService { // extends BaseService{
   constructor(
     private accountService: AccountService,
+    private kmpUserService: KmpUserService,
     private authServerProvider: AuthServerProvider,
     private translate: TranslateService,
     private localStorage: LocalStorageService,
@@ -46,7 +47,14 @@ export class LoginService { // extends BaseService{
           if (account !== null) {
             this.translate.use(account.langKey);
           }
-          resolve(account);
+          this.kmpUserService.identity(true).then(kmpUser => {
+            // After the login the language will be changed to
+            // the language selected by the user during his registration
+            // if (kmpUser !== null && kmpUser.langKey !== null) {
+            //   this.translate.use(kmpUser.langKey);
+            // }
+            resolve(account);
+          });
         });
         return callback();
       },

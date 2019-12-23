@@ -63,6 +63,7 @@
     "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.24.0",
     "ng-jhipster": "0.11.2",
     "ngx-webstorage": "4.0.1",
     "rxjs": "~6.5.1",

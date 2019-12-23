@@ -2,10 +2,16 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// export const environment = {
+//   production: false,
+//   apiUrl: 'http://localhost:8080/api',
+//   configUrl: 'https://localhost:8080/content/KMPConfig.json'
+// };
+
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:8080/api',
-  configUrl: 'https://localhost:8080/content/KMPConfig.json'
+  production: true,
+  apiUrl: 'https://knowmypeople.com/api',
+  configUrl: 'https://knowmypeople.com/content/KMPConfig.json'
 };
 
 /*

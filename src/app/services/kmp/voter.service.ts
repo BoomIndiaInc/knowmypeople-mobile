@@ -21,7 +21,7 @@ export class VoterService {
     private kmpUserService: KmpUserService,
     private coreUtil: CoreUtil,
   ) {
-    this.isElectionDay = this.coreUtil.isTodayElectionDay();
+    this.kmpUserService.isTodayElectionDay().then(isElectionDay => this.isElectionDay);
 
   }
 

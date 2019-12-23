@@ -12,7 +12,6 @@
   "default-menu-id":"settings",
   "default-lang": "en",
   "supported-languages": ["en"],
-  "active-election-date": "2019-12-11",
   "menus": [
     
     {
@@ -26,8 +25,7 @@
         "ROLE_ADMIN",
         "ROLE_AGENT",
         "ROLE_USER",
-        "ROLE_DIST",
-        "ROLE_ANONYMOUS"
+        "ROLE_DIST"
       ],
       "enable": true
     },
@@ -42,8 +40,7 @@
         "ROLE_ADMIN",
         "ROLE_AGENT",
         "ROLE_USER",
-        "ROLE_DIST",
-        "ROLE_ANONYMOUS"
+        "ROLE_DIST"
       ],
       "enable": false
     },
@@ -57,7 +54,8 @@
       "authorities": [
         "ROLE_ADMIN",
         "ROLE_AGENT",
-        "ROLE_USER"
+        "ROLE_USER",
+        "ROLE_DIST"
       ],
       "enable": true
     },
@@ -71,7 +69,8 @@
       "authorities": [
         "ROLE_ADMIN",
         "ROLE_AGENT",
-        "ROLE_USER"
+        "ROLE_USER",
+        "ROLE_DIST"
       ],
       "enable": true
     },
@@ -85,7 +84,8 @@
       "authorities": [
         "ROLE_ADMIN",
         "ROLE_AGENT",
-        "ROLE_USER"
+        "ROLE_USER",
+        "ROLE_DIST"
       ],
       "enable": false
     }
@@ -113,5 +113,5 @@
   },
   "privacy": {},
   "auto-sync" : false,
-  "auto-sync-duration": 30000
+  "auto-sync-duration": 30
 }

@@ -74,7 +74,7 @@ export class AppComponent {
       () => {
         this.getAppConfig();
       },
-      'PLEASE_WAIT',
+      '',
       () => {
         this.splashScreen.hide();
       }
@@ -104,7 +104,7 @@ export class AppComponent {
     this.appService.appConfig().subscribe(
       response => {
         this.resolverService.allProperties = response.body;
-        this.initializeApp(this.resolverService.allProperties || response.body);
+        this.initializeApp(response.body || this.resolverService.allProperties);
       },
       async response => {
         // Unable to fetch app configurations

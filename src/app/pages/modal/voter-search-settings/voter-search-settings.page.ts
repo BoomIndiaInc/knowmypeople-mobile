@@ -23,7 +23,8 @@ export class VoterSearchSettingsPage implements OnInit {
       serialNumber: [!searchPreference ? true : searchPreference.serialNumber ? true : false],
       voterId: [!searchPreference ? true : searchPreference.voterId ? true : false],
       voterName: [!searchPreference ? true : searchPreference.voterName ? true : false],
-      husbandOrFatherName: [!searchPreference ? true : searchPreference.husbandOrFatherName ? true : false]
+      husbandOrFatherName: [!searchPreference ? true : searchPreference.husbandOrFatherName ? true : false],
+      doorNumber: [!searchPreference ? true : searchPreference.doorNumber ? true : false],
     });
   }
 

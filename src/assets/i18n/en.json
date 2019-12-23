@@ -165,5 +165,6 @@
   "GEO_LOCATION_ERROR": "Unable to get location coordinates.",
   "GEO_LOCATION_ADDRESS_ERROR": "Unable to locate address using location coordinates",
   "FETCHING_LOCATION_DATA": "Fetching your location data ...",
-  "REGISTERING": "Registering... "
+  "REGISTERING": "Registering... ",
+  "ALL": "All"
 }

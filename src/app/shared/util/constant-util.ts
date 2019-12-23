@@ -7,7 +7,6 @@ export const DEFAULT_APP_CONFIG = {
   'default-menu-id': 'settings',
   'default-lang': 'en',
   'supported-languages': ['en'],
-  'active-election-date': '2019-12-11',
   menus: [
     {
       id: 'voters',
@@ -16,7 +15,7 @@ export const DEFAULT_APP_CONFIG = {
       direct: 'root',
       icon: 'people',
       active: false,
-      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST', 'ROLE_ANONYMOUS'],
+      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST'],
       enable: true
     },
     {
@@ -26,7 +25,7 @@ export const DEFAULT_APP_CONFIG = {
       direct: 'forward',
       icon: 'people',
       active: false,
-      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST', 'ROLE_ANONYMOUS'],
+      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST'],
       enable: false
     },
     {
@@ -36,7 +35,7 @@ export const DEFAULT_APP_CONFIG = {
       direct: 'root',
       icon: 'information-circle-outline',
       active: false,
-      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST', 'ROLE_ANONYMOUS'],
       enable: true
     },
     {
@@ -46,7 +45,7 @@ export const DEFAULT_APP_CONFIG = {
       direct: 'root',
       icon: 'cog',
       active: false,
-      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST', 'ROLE_ANONYMOUS'],
       enable: true
     },
     {
@@ -56,7 +55,7 @@ export const DEFAULT_APP_CONFIG = {
       direct: 'forward',
       icon: 'contact',
       active: false,
-      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER'],
+      authorities: ['ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_USER', 'ROLE_DIST', 'ROLE_ANONYMOUS'],
       enable: false
     }
   ],

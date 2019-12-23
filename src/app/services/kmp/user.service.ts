@@ -8,7 +8,8 @@ import { CoreUtil } from 'src/app/shared/util/core-util';
 import { User, UserType } from './../../../model/user.model';
 import { AccountService } from '../auth/account.service';
 import { PropertyResolverService } from '../property-resolver/property-resolver.service';
-
+import { KmpService } from './kmp.service';
+import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +24,8 @@ export class KmpUserService {
     private http: HttpClient,
     private coreUtil: CoreUtil,
     private accountService: AccountService,
-    private resolverService: PropertyResolverService
+    private resolverService: PropertyResolverService,
+    private kmpService: KmpService
   ) {}
 
   fetch(username: string = this.accountService.getUsername()): Observable<HttpResponse<User>> {
@@ -82,9 +84,9 @@ export class KmpUserService {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < authorities.length; i++) {
       if (this.userIdentity.authorities.includes(authorities[i])) {
-        hasAuthority =  true;
+        hasAuthority = true;
       } else {
-        return hasAuthority = false;
+        return (hasAuthority = false);
       }
     }
 
@@ -109,8 +111,8 @@ export class KmpUserService {
         const user = response.body;
         if (user) {
           this.userIdentity = user;
-          this.localStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity)) ||
-            this.sessionStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity));
+          this.localStorage.store('kmp-useridentity', JSON.stringify(this.userIdentity)) ||
+            this.sessionStorage.store('kmp-useridentity', JSON.stringify(this.userIdentity));
 
           this.authenticated = true;
           this.userIdentity.userType = this.getUserType();
@@ -142,8 +144,8 @@ export class KmpUserService {
         const resUser = response.body;
         if (resUser) {
           this.userIdentity = resUser;
-          this.localStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity)) ||
-            this.sessionStorage.store('kmpUserIdentity', JSON.stringify(this.userIdentity));
+          this.localStorage.store('kmp-useridentity', JSON.stringify(this.userIdentity)) ||
+            this.sessionStorage.store('kmp-useridentity', JSON.stringify(this.userIdentity));
 
           this.userIdentity.userType = this.getUserType();
           // this.authenticated = true;
@@ -221,6 +223,10 @@ export class KmpUserService {
     return this.isIdentityResolved() ? this.userIdentity.boothId : null;
   }
 
+  getElectionId(): string {
+    return this.isIdentityResolved() ? this.userIdentity.electionId : null;
+  }
+
   getElectionType(): string {
     return this.isIdentityResolved() ? this.userIdentity.electionType : null;
   }
@@ -246,5 +252,33 @@ export class KmpUserService {
   getUserName(): string {
     return this.isIdentityResolved() ? this.userIdentity.login : null;
   }
-  
+
+  isTodayElectionDay(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.kmpService
+        .fetchAllElections()
+        .toPromise()
+        .then(response => {
+          const elections = response.body;
+          if (elections && elections.length > 0) {
+            const electionMatch = elections.filter((election: any) => election.electionId === this.getElectionId());
+            const electionDateTime = (electionMatch[0]) ? electionMatch[0].date : null;
+            if (electionDateTime) {
+              if (moment(electionDateTime).format('DD-MM-YYYY') === moment(new Date()).format('DD-MM-YYYY')) {
+                resolve(true);
+              } else {
+                resolve(false);
+              }
+            } else {
+              resolve(false);
+            }
+          } else {
+            resolve(false);
+          }
+        })
+        .catch(err => {
+          resolve(false);
+        });
+    });
+  }
 }

@@ -30,6 +30,7 @@ export class SettingsPage implements OnInit {
   userWardId: any;
   userElectionType: any;
   enableAutoSync: any;
+  autoSyncDuration: any;
   enableOfflineSupport: any;
   language: any;
   nullValue: string = null;
@@ -76,11 +77,13 @@ export class SettingsPage implements OnInit {
     this.userWardId = this.kmpUserService.getWardId();
     this.language = this.kmpUserService.getLanguage() || this.resolverService.getPropertyValue('default-lang');
     this.enableAutoSync = !!this.kmpUserService.getAutoSync();
+    this.autoSyncDuration = this.kmpUserService.getAutoSyncDuration();
 
     this.settingsForm = formBuilder.group({
       imageUrl: [this.userImageUrl],
       language: [this.language],
       autoSync: [this.enableAutoSync],
+      autoSyncDuration: [this.autoSyncDuration],
       boothId: [this.userBoothId],
       wardId: [this.userWardId],
       electionType: [this.userElectionType]
@@ -99,7 +102,7 @@ export class SettingsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.menuCtrl.enable(this.showMenuOption());
+    // this.menuCtrl.enable(this.showMenuOption());
   }
 
   showMenuOption(): boolean {
@@ -122,6 +125,7 @@ export class SettingsPage implements OnInit {
         this.userWardId = kmpUser.wardId;
         this.language = kmpUser.language;
         this.enableAutoSync = kmpUser.autoSync;
+        this.autoSyncDuration = kmpUser.autoSyncDuration;
         this.searchCriteria = {
           boothId: this.userBoothId,
           wardId: this.userWardId,
@@ -202,7 +206,7 @@ export class SettingsPage implements OnInit {
   }
 
   updateUserPreference() {
-    this.menuCtrl.enable(this.showMenuOption());
+    // this.menuCtrl.enable(this.showMenuOption());
     const userIdentity = this.kmpUserService.getUserIdentity();
     const profileFormValues = this.settingsForm.getRawValue();
     const finalUserIdentity = { ...userIdentity, ...profileFormValues };

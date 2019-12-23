@@ -73,9 +73,11 @@ export class VotersPage implements OnInit {
       serialNumber: !this.searchPreference ? true : this.searchPreference.serialNumber ? true : false,
       voterId: !this.searchPreference ? true : this.searchPreference.voterId ? true : false,
       voterName: !this.searchPreference ? true : this.searchPreference.voterName ? true : false,
-      husbandOrFatherName: !this.searchPreference ? true : this.searchPreference.husbandOrFatherName ? true : false
+      husbandOrFatherName: !this.searchPreference ? true : this.searchPreference.husbandOrFatherName ? true : false,
+      doorNumber: !this.searchPreference ? true : this.searchPreference.doorNumber ? true : false
+
     };
-    this.isElectionDay = this.coreUtil.isTodayElectionDay();
+    this.kmpUserService.isTodayElectionDay().then(isElectionDay => this.isElectionDay);
   }
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
@@ -110,20 +112,21 @@ export class VotersPage implements OnInit {
   }
 
   matchAvailabilityCheck(searchTerm, voter: Voter) {
-
     const searchAvailableConfig = {
       serialNumber: voter.serialNumber ? voter.serialNumber.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
       voterId: voter.voterId ? voter.voterId.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
       voterName: voter.voterName ? voter.voterName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false,
       husbandOrFatherName: voter.husbandOrFatherName
         ? voter.husbandOrFatherName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-        : false
+        : false,
+      doorNumber: voter.doorNumber ? voter.doorNumber.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 : false
     };
     const isMatching =
       searchAvailableConfig.serialNumber ||
       searchAvailableConfig.voterId ||
       searchAvailableConfig.voterName ||
-      searchAvailableConfig.husbandOrFatherName;
+      searchAvailableConfig.husbandOrFatherName ||
+      searchAvailableConfig.doorNumber;
     console.log(isMatching);
     return isMatching;
   }
