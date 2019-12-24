@@ -146,10 +146,12 @@ export class VoterDetailPage implements OnInit {
         if (!isVoted) {
           this.componentUtil.showConfirmationAlert('UN_VOTE_WARNING', () => {
             voterElection.voted = isVoted;
+            voterElection.votedDateTime = new Date().toISOString();
             this.updateVoterforSyncData();
           });
         } else {
           voterElection.voted = isVoted;
+          voterElection.votedDateTime = new Date().toISOString();
           this.updateVoterforSyncData();
         }
       }

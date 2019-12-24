@@ -140,26 +140,26 @@
 
           <ion-item>
             <ion-label color="dark" position="stacked">{{'BOOTH' | translate}}:</ion-label>
-            <ion-input formControlName="boothId"  name="boothId" inputmode="text" placeholder="Ex..: BoothId001" [value]="voter.boothId"></ion-input>
+            <ion-input formControlName="boothId"  name="boothId" inputmode="text" placeholder="Ex..: BoothId001" [value]="voter.voterElectionDTOList[0].boothId"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label color="dark" position="stacked">{{'WARD_NUMBER' | translate}}:</ion-label>
-            <ion-input formControlName="wardNumber"  name="wardNumber" inputmode="text" placeholder="Ex.: ward001"  [value]="voter.wardNumber"></ion-input>
+            <ion-input formControlName="wardNumber"  name="wardNumber" inputmode="text" placeholder="Ex.: ward001"  [value]="voter.voterElectionDTOList[0].wardNumber"></ion-input>
           </ion-item>
 
           <ion-item>
               <ion-label color="dark" position="stacked">{{'MLA_CONSTITUENCY' | translate}}:</ion-label>
-              <!-- <ion-input formControlName="mlaConstituency"  name="mlaConstituency" inputmode="text" placeholder="Ex..: MLA"  [value]="voter.mlaConstituency"></ion-input> -->
-              <ion-checkbox color="primary"  formControlName="mlaConstituency"  name="mlaConstituency" >
-              </ion-checkbox>
+              <ion-input formControlName="mlaConstituency"  name="mlaConstituency" inputmode="text" placeholder="Ex..: MLA"  [value]="voter.mlaConstituency"></ion-input>
+              <!-- <ion-checkbox color="primary"  formControlName="mlaConstituency"  name="mlaConstituency" > -->
+              <!-- </ion-checkbox> -->
             </ion-item>
     
           <ion-item>
             <ion-label color="dark" position="stacked">{{'MP_CONSTITUENCY' | translate}}:</ion-label>
-            <!-- <ion-input formControlName="mpConstituency"  name="mpConstituency" inputmode="text" placeholder="Ex.: MP"  [value]="voter.mpConstituency"></ion-input> -->
-            <ion-checkbox color="primary"  formControlName="mpConstituency"  name="mpConstituency" >
-            </ion-checkbox>
+            <ion-input formControlName="mpConstituency"  name="mpConstituency" inputmode="text" placeholder="Ex.: MP"  [value]="voter.mpConstituency"></ion-input>
+            <!-- <ion-checkbox color="primary"  formControlName="mpConstituency"  name="mpConstituency" > -->
+            <!-- </ion-checkbox> -->
           </ion-item>
 
         </ion-list>
@@ -284,75 +284,75 @@
     <ion-card-content>
       <ion-list lines="full">
         <ion-item>
-          <ion-label text-wrap slot="start"><b>voterId:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>voterId:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.voterId }}
-          </ion-label>
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>voterName:</b></ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>voterName:</b></ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.voterName }}
-          </ion-label>
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>serialNumber:</b></ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>serialNumber:</b></ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.serialNumber }}
-          </ion-label>
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>husbandOrFatherName:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>husbandOrFatherName:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.husbandOrFatherName }}
-          </ion-label>
+          </ion-text>
         </ion-item>
 
         <ion-item>
-          <ion-label text-wrap slot="start"><b>gender:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>gender:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.gender }}
-          </ion-label>
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>age:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>age:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.age }}
-          </ion-label>
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>religion:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
+          <ion-text text-wrap slot="start"><b>religion:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
             {{ voter.religion }}
-          </ion-label>
+          </ion-text>
         </ion-item>
 
         <ion-item>
-          <ion-label text-wrap slot="start"><b>boothId:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
-            {{ voter.boothId }}
-          </ion-label>
+          <ion-text text-wrap slot="start"><b>boothId:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
+            {{ voter.voterElectionDTOList[0].boothId }}
+          </ion-text>
         </ion-item>
         <ion-item>
-          <ion-label text-wrap slot="start"><b>wardId:</b> </ion-label>
-          <ion-label slot="end" class="ion-text-capitalize">
-            {{ voter.wardNumber }}
-          </ion-label>
+          <ion-text text-wrap slot="start"><b>wardId:</b> </ion-text>
+          <ion-text slot="end" class="ion-text-capitalize">
+            {{ voter.voterElectionDTOList[0].wardNumber }}
+          </ion-text>
         </ion-item>
 
         {{voterElection | json}}
         <ion-item *ngFor="let voterElection of voter.voterElectionDTOList" class="ion-text-capitalize">
-          <ion-label slot="start"><b>{{ voterElection.electionType }}:</b></ion-label>
-          <ion-label slot="end">
+          <ion-text slot="start"><b>{{ voterElection.electionType }}:</b></ion-text>
+          <ion-text slot="end">
             {{ voterElection?.voted ? 'Voted' : 'Not Voted' }}
-          </ion-label>
+          </ion-text>
         </ion-item>
 
       </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
-<ion-footer class="vote-footer" *ngIf="isElectionDay">
+<ion-footer class="vote-footer" color="dark" *ngIf="isElectionDay">
   <ion-toolbar class="vote-toolbar">
     <ion-button *ngIf ="!voter.voterElectionDTOList[0].voted; else unVote" color="success" expand="full" (click)="onVoteOrUnVote(true)">
       {{'VOTE'| translate}}
