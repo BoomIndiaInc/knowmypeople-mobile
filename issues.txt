@@ -1,0 +1,30 @@
+Q1. [ERROR] Unable to find command: deploy add ionic deploy - (paid) Appflow Deploy functionality
+
+[ERROR] Unable to find command: deploy add
+
+  ionic deploy - (paid) Appflow Deploy functionality
+
+    Interface to execute commands about deploy builds on Ionic Appflow.
+    
+    Appflow deploy documentation:
+    - Overview: https://ion.link/appflow-deploy-docs
+
+  Usage:
+
+    $ ionic deploy <command> [<args>] [--help] [--verbose] [--quiet] [--no-interactive] [--no-color] [--confirm] [options]
+
+  Project Commands:
+
+    build ........................... Create a deploy build on Appflow
+
+    Answer:-
+
+    So I run 
+    npm install -g ionic@latest, 
+    npm install, restarted and run 
+    npm i -g native-run and now 
+    ionic deploy add 
+    
+    is working. I can’t tell which solved the problem and I’m glad it’s.
+
+    https://forum.ionicframework.com/t/error-unable-to-find-command-deploy-add-ionic-deploy-paid-appflow-deploy-functionality/173196
