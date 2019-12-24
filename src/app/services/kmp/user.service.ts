@@ -264,6 +264,8 @@ export class KmpUserService {
             const electionMatch = elections.filter((election: any) => election.electionId === this.getElectionId());
             const electionDateTime = (electionMatch[0]) ? electionMatch[0].date : null;
             if (electionDateTime) {
+              console.log(moment(electionDateTime).format('DD-MM-YYYY'));
+              console.log(moment(new Date()).format('DD-MM-YYYY'));
               if (moment(electionDateTime).format('DD-MM-YYYY') === moment(new Date()).format('DD-MM-YYYY')) {
                 resolve(true);
               } else {

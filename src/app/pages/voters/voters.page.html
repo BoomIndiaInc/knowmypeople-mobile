@@ -36,7 +36,7 @@
         </ion-label>
         <ng-template [ngIf]="isElectionDay">
           <ion-avatar slot="end" *ngFor=" let voterElection of voter.voterElectionDTOList">
-            <ion-icon *ngIf="voterElection.electionType === electionType" name="ribbon" [color]="(voterElection.electionType === electionType && voterElection.voted)? 'success':'danger'"></ion-icon>        
+            <ion-icon *ngIf="voterElection.electionType === electionType" name="ribbon" [color]="(voterElection.electionType === electionType && voterElection?.voted)? 'success':'danger'"></ion-icon>        
           </ion-avatar>
         </ng-template>
 

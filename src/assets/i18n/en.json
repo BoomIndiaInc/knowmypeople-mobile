@@ -166,5 +166,6 @@
   "GEO_LOCATION_ADDRESS_ERROR": "Unable to locate address using location coordinates",
   "FETCHING_LOCATION_DATA": "Fetching your location data ...",
   "REGISTERING": "Registering... ",
-  "ALL": "All"
+  "ALL": "All",
+  "doorNumber": "Door Number"
 }

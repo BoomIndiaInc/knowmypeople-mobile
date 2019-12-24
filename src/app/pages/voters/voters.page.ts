@@ -77,8 +77,11 @@ export class VotersPage implements OnInit {
       doorNumber: !this.searchPreference ? true : this.searchPreference.doorNumber ? true : false
 
     };
-    this.kmpUserService.isTodayElectionDay().then(isElectionDay => this.isElectionDay);
+    this.kmpUserService.isTodayElectionDay().then(isElectionDay => {
+      this.isElectionDay = isElectionDay;
+    });
   }
+
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
     this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
@@ -127,7 +130,6 @@ export class VotersPage implements OnInit {
       searchAvailableConfig.voterName ||
       searchAvailableConfig.husbandOrFatherName ||
       searchAvailableConfig.doorNumber;
-    console.log(isMatching);
     return isMatching;
   }
 

@@ -91,7 +91,9 @@ export class VoterDetailPage implements OnInit {
         district: [this.voter.district]
       });
     });
-    this.kmpUserService.isTodayElectionDay().then(isElectionDay => this.isElectionDay);
+    this.kmpUserService.isTodayElectionDay().then(isElectionDay => {
+      this.isElectionDay = isElectionDay;
+    });
   }
 
   onLocation() {

@@ -16,7 +16,10 @@ export class VoterElection {
         public electionId: string = null,
         public boothId: string = null,
         public wardNumber: string = null,
-        public memberOfParty: string = null
+        public memberOfParty: string = null,
+        public slipDistributedDateTime: string = null,
+        public slipValue: string = null,
+        public needsTransportForVote: string = null
       ) {}
 }
 

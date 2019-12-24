@@ -8,7 +8,7 @@ import { SessionStorageService, LocalStorageService } from 'ngx-webstorage';
   styleUrls: ['./voter-search-settings.page.scss']
 })
 export class VoterSearchSettingsPage implements OnInit {
-  availablePreferences = ['serialNumber', 'voterId', 'voterName', 'husbandOrFatherName'];
+  availablePreferences = ['serialNumber', 'voterId', 'voterName', 'husbandOrFatherName', 'doorNumber'];
   public preferenceForm: FormGroup;
   constructor(
     private modalCtrl: ModalController,
