@@ -11,6 +11,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { CoreUtil } from 'src/app/shared/util/core-util';
 import { GeoLocationService } from 'src/app/services/geo-location/geo-location.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
+import { forkJoin } from 'rxjs';
+import { KmpService } from 'src/app/services/kmp/kmp.service';
 
 @Component({
   selector: 'app-voter-detail',
@@ -24,6 +26,9 @@ export class VoterDetailPage implements OnInit {
   voterLocation;
   isElectionDay: boolean;
   voterForm: FormGroup;
+  booths: any = [];
+  wards: any = [];
+  electionTypes: any = [];
   constructor(
     private route: ActivatedRoute,
     private voterService: VoterService,
@@ -34,7 +39,8 @@ export class VoterDetailPage implements OnInit {
     private syncDataService: SyncDataService,
     public formBuilder: FormBuilder,
     private geoLocationService: GeoLocationService,
-    public cameraService: CameraService
+    public cameraService: CameraService,
+    private kmpService: KmpService
   ) {
     const menuId = 'voter-details';
     console.log(menuId);
@@ -46,6 +52,17 @@ export class VoterDetailPage implements OnInit {
   ngOnInit() {
     const index = this.route.snapshot.paramMap.get('voterPk');
     console.log(index);
+
+    forkJoin([
+      this.kmpService.fetchAllBooths(),
+      this.kmpService.fetchAllElectionTypes(),
+      this.kmpService.fetchAllWards()
+    ]).subscribe(results => {
+      this.booths = results[0].body;
+      this.electionTypes = results[1].body;
+      this.wards = results[2].body;
+    });
+
     this.voterService.fetchVoter(+index).then((voter: Voter) => {
       console.log(voter);
       this.voter = voter;
@@ -94,6 +111,19 @@ export class VoterDetailPage implements OnInit {
     this.kmpUserService.isTodayElectionDay().then(isElectionDay => {
       this.isElectionDay = isElectionDay;
     });
+  }
+
+  boothSelected(event) {
+    console.log('booth Selected : ' + event.detail.value);
+    // this.voterForm.patchValue({boothId: event.detail.value});
+    // this.searchCriteria.boothId = this.settingsForm.getRawValue() ? this.voterElection.getRawValue().boothId : null;
+
+  }
+
+  wardSelected(event) {
+    console.log('ward Selected : ' + event.detail.value);
+    // this.voterForm.patchValue({wardNumber: event.detail.value});
+    // this.searchCriteria.wardId = this.settingsForm.getRawValue() ? this.settingsForm.getRawValue().wardId : null;
   }
 
   onLocation() {

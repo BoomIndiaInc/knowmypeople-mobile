@@ -140,12 +140,21 @@
 
           <ion-item>
             <ion-label color="dark" position="stacked">{{'BOOTH' | translate}}:</ion-label>
-            <ion-input formControlName="boothId"  name="boothId" inputmode="text" placeholder="Ex..: BoothId001" [value]="voter.voterElectionDTOList[0].boothId"></ion-input>
+            <!-- <ion-input formControlName="boothId"  name="boothId" inputmode="text" placeholder="Ex..: BoothId001" [value]="voter.voterElectionDTOList[0].boothId"></ion-input> -->
+            <ion-select [disabled]= "true" formControlName="boothId"  name="boothId" [selectedText]="voter.voterElectionDTOList[0].boothId" (ionChange)="boothSelected($event)">
+              <ion-select-option [value]="null">{{'ALL' | translate}}</ion-select-option>
+              <ion-select-option *ngFor="let booth of booths" [value]="booth">{{booth}}</ion-select-option>
+              
+            </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label color="dark" position="stacked">{{'WARD_NUMBER' | translate}}:</ion-label>
-            <ion-input formControlName="wardNumber"  name="wardNumber" inputmode="text" placeholder="Ex.: ward001"  [value]="voter.voterElectionDTOList[0].wardNumber"></ion-input>
+            <!-- <ion-input formControlName="wardNumber"  name="wardNumber" inputmode="text" placeholder="Ex.: ward001"  [value]="voter.voterElectionDTOList[0].wardNumber"></ion-input> -->
+            <ion-select  [disabled]= "true" formControlName="wardNumber"  name="wardNumber" [selectedText]="voter.voterElectionDTOList[0].wardNumber" (ionChange)="wardSelected($event)">
+              <ion-select-option [value]="null">{{'ALL' | translate}}</ion-select-option>
+            <ion-select-option *ngFor="let ward of wards" [value]="ward">{{ward}}</ion-select-option>
+          </ion-select>
           </ion-item>
 
           <ion-item>
