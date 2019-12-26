@@ -138,7 +138,7 @@ export class ComponentUtil {
       position: options && options.position ? options.position : 'top',
       cssClass: options && options.cssClass ? options.cssClass : 'toast',
       showCloseButton: options && options.showCloseButton ? options.showCloseButton : true,
-      closeButtonText: options && options.closeButtonText ? options.closeButtonText : 'OK'
+      closeButtonText: options && options.closeButtonText ? options.closeButtonText : this.translateService.instant('OK_BUTTON')
       // dismissOnPageChange: options && options.dismissOnPageChange ? options.dismissOnPageChange : false
       // color:  (options && options.color) ? options.color : 'primary'
     });

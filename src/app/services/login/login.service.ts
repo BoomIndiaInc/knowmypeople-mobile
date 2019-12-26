@@ -44,13 +44,14 @@ export class LoginService { // extends BaseService{
         this.accountService.identity(true).then(account => {
           // After the login the language will be changed to
           // the language selected by the user during his registration
+          
           if (account !== null) {
             this.translate.use(account.langKey);
           }
           this.kmpUserService.identity(true).then(kmpUser => {
             // After the login the language will be changed to
             // the language selected by the user during his registration
-            // if (kmpUser !== null && kmpUser.langKey !== null) {
+            // if (kmpUser !== null && kmpUser.langKey) {
             //   this.translate.use(kmpUser.langKey);
             // }
             resolve(account);
@@ -83,7 +84,8 @@ export class LoginService { // extends BaseService{
       this.accountService.identity(false).then(account => {
         // After the login the language will be changed to
         // the language selected by the user during his registration
-        if (account !== null) {
+        
+        if (account !== null && account.langKey) {
           this.translate.use(account.langKey);
         }
         resolve(userIdentity);

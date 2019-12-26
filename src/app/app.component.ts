@@ -14,6 +14,7 @@ import { NetworkService } from './services/network/network.service';
 import { InAppBrowserService } from './services/in-app-browser/in-app-browser.service';
 import { KmpUserService } from './services/kmp/user.service';
 import { User } from 'src/model/user.model';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-root',
@@ -45,7 +46,9 @@ export class AppComponent {
     private kmpUserService: KmpUserService,
     private resolverService: PropertyResolverService,
     private networkService: NetworkService,
-    private inAppBroswserService: InAppBrowserService
+    private inAppBroswserService: InAppBrowserService,
+    private localStorage: LocalStorageService,
+    private sessionStorage: SessionStorageService,
   ) {
     this.init();
   }
@@ -140,14 +143,15 @@ export class AppComponent {
 
   initTranslate() {
     const enLang = this.resolverService.getPropertyValue('default-lang');
-
+    const selectedLanguage = this.localStorage.retrieve('language');
     // Set the default language for translation strings, and the current language.
-    this.translate.setDefaultLang(enLang);
+    const language = selectedLanguage ? selectedLanguage : enLang;
+    this.translate.setDefaultLang(language);
 
-    if (this.translate.getBrowserLang() !== undefined) {
+    if (!language && this.translate.getBrowserLang() !== undefined) {
       this.translate.use(this.translate.getBrowserLang());
     } else {
-      this.translate.use(enLang); // Set your language here
+      this.translate.use(language); // Set your language here
     }
 
   }

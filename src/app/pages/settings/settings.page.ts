@@ -38,7 +38,7 @@ export class SettingsPage implements OnInit {
   showMenuBar: boolean;
   public settingsForm: FormGroup;
 
-  languages: any = ['en'];
+  languages: any = ['en', 'ta'];
   booths: any = [];
   wards: any = [];
   electionTypes: any = [];
@@ -209,6 +209,9 @@ export class SettingsPage implements OnInit {
     // this.menuCtrl.enable(this.showMenuOption());
     const userIdentity = this.kmpUserService.getUserIdentity();
     const profileFormValues = this.settingsForm.getRawValue();
+    const selectedLanguage = profileFormValues.language;
+    this.localStorage.store('language', selectedLanguage);
+    this.translateService.use(profileFormValues.language);
     const finalUserIdentity = { ...userIdentity, ...profileFormValues };
 
     this.kmpUserService

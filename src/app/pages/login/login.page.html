@@ -17,7 +17,7 @@
         <ion-toggle formControlName="rememberMe"  name="rememberMe"></ion-toggle>
       </ion-item>
       <ion-button class="ion-margin" color="primary" [disabled]="!loginForm.valid" (click)="onLogin()">{{ 'LOGIN_BUTTON' | translate }}</ion-button>
-      <p class="forgot-password" routerLink="/forgot-password" ><strong>{{ 'FORGOT_YOUR_PASSWORD' | translate }}</strong></p>
+      <p color="secondary" class="forgot-password" routerLink="/forgot-password" ><strong>{{ 'FORGOT_YOUR_PASSWORD' | translate }}</strong></p>
 
       <p class="signup" color="light" routerLink="/signup" >{{ 'NO_ACCOUNT_MESSAGE' | translate}} <strong>{{ 'SIGNUP_HERE' | translate}}</strong>.</p>
     </form>

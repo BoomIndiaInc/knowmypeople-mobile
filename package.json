@@ -1,7 +1,7 @@
 {
   "name": "knowmypeople-mobile",
   "version": "0.0.1",
-  "author": "Ionic Framework + JHipster",
+  "author": "Sathiyendren Rajendran",
   "homepage": "https://www.knowmypeople.com",
   "scripts": {
     "ng": "ng",
@@ -184,5 +184,5 @@
     ],
     "coverageDirectory": "./public/coverage"
   },
-  "description": "A hipster Ionic project, made with 💙 by @oktadev!"
+  "description": "know my people application helps to anlayse the voters view and interest."
 }

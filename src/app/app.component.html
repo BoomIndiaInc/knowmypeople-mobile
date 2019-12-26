@@ -18,7 +18,7 @@
               </ion-text>
               <ion-text color="secondary">
                 <h3>
-                  {{userType | translate}}
+                  userType
                 </h3>
               </ion-text>
               <ion-menu-toggle class="mto" auto-hide="false">
@@ -73,7 +73,7 @@
         </div>
 
         <div class="footer-app-version">
-          Version v{{version}}
+          {{'VERSION' | translate}} {{'V' | translate}}{{version}}
         </div>
       </div>
     </ion-menu>

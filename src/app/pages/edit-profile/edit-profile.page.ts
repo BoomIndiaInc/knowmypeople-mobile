@@ -27,7 +27,6 @@ export class EditProfilePage implements OnInit {
   lastName: string;
   mobileNumber: string;
   emailId: string;
-  userTypes: any = ['BoothAgent'];
   public profileForm: FormGroup;
 
   constructor(
