@@ -127,7 +127,7 @@
   "OCCUPATION": "Occupation",
   "CASTE": "caste",
   "COMMUNITY": "community",
-  "RELIFION": "religion",
+  "RELIGION": "religion",
   "ELECTION": "Election",
   "WARD_NUMBER": "Ward Number",
   "MLA_CONSTITUENCY": "MLA Constituency",
@@ -145,5 +145,9 @@
   "FETCHING_LOCATION_DATA": "Fetching your location data ...",
   "REGISTERING": "Registering... ",
   "ALL": "All",
-  "doorNumber": "Door Number"
+  "doorNumber": "Door Number",
+  "ta": "Tamil",
+  "SEARCH": "Search Voter",
+  "VERSION": "Version",
+  "V": "v"
 }
