@@ -6,7 +6,7 @@ export const DEFAULT_APP_CONFIG = {
   mode: 'qe',
   'default-menu-id': 'settings',
   'default-lang': 'en',
-  'supported-languages': ['en'],
+  'supported-languages': ['en',"ta"],
   menus: [
     {
       id: 'voters',
