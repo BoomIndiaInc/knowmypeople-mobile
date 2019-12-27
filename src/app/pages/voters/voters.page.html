@@ -18,7 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content >
   <ion-list>
     <ion-item *ngFor="let voter of voters;" [routerLink]="voter.voterPk">
       <ion-avatar slot="start">
@@ -51,6 +51,10 @@
     </ion-item>
   </ion-list>
 
+  <ion-infinite-scroll (ionInfinite)="loadVoters(true, $event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'LOADING_VOTERS' | translate}}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
   <!-- <ion-card class="ion-no-margin no-radius">
       <ion-item lines="none" color="medium">
         <ion-label>
@@ -82,3 +86,4 @@
 
   <!-- <popmenu></popmenu> -->
 </ion-content>
+

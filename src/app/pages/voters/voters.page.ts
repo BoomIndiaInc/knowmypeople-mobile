@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  NavController,
+  AlertController,
+  MenuController,
+  ToastController,
+  PopoverController,
+  ModalController,
+  IonContent
+} from '@ionic/angular';
 
 // Modals
 import { VoterSearchSettingsPage } from '../../pages/modal/voter-search-settings/voter-search-settings.page';
@@ -18,6 +26,8 @@ import { VoterService } from 'src/app/services/kmp/voter.service';
 import { Voter } from 'src/model/voter.model';
 import { Page } from 'src/app/interfaces/pages';
 import { CoreUtil } from 'src/app/shared/util/core-util';
+import { IonInfiniteScroll } from '@ionic/angular';
+
 @Component({
   selector: 'app-voters',
   templateUrl: './voters.page.html',
@@ -25,14 +35,19 @@ import { CoreUtil } from 'src/app/shared/util/core-util';
 })
 export class VotersPage implements OnInit {
   pageMenu: Page;
+  @ViewChild(IonInfiniteScroll, { read: true, static: true }) infinite: IonInfiniteScroll;
+  @ViewChild(IonContent, { read: true, static: true }) content: IonContent;
   searchKey = '';
   yourLocation = '123 Test Street';
   themeCover = 'assets/img/ionic4-Start-Theme-cover.jpg';
   searchPreference = null;
   voters: Voter[] = [];
   localVoters: Voter[] = [];
+  searchVoters: Voter[] = [];
   electionType: string;
   isElectionDay: boolean;
+  searchValue = '';
+  offset = 0;
   constructor(
     public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -75,7 +90,6 @@ export class VotersPage implements OnInit {
       voterName: !this.searchPreference ? true : this.searchPreference.voterName ? true : false,
       husbandOrFatherName: !this.searchPreference ? true : this.searchPreference.husbandOrFatherName ? true : false,
       doorNumber: !this.searchPreference ? true : this.searchPreference.doorNumber ? true : false
-
     };
     this.kmpUserService.isTodayElectionDay().then(isElectionDay => {
       this.isElectionDay = isElectionDay;
@@ -84,9 +98,11 @@ export class VotersPage implements OnInit {
 
   ionViewWillEnter() {
     this.menuCtrl.enable(true);
-    this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
-      this.voters = this.localVoters = voters;
-    });
+    // this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
+    //   this.localVoters = voters;
+    //   this.offset = 0;
+    //   this.loadVoters();
+    // });
   }
 
   async onVoterSearchSettings() {
@@ -104,7 +120,9 @@ export class VotersPage implements OnInit {
     this.componentUtil.showLoading(() => {
       this.votersService.getVotersFromLocal().then((voters: Voter[]) => {
         console.log(voters);
-        this.voters = this.localVoters = voters;
+        this.localVoters = this.searchVoters = voters;
+        this.offset = 0;
+        this.loadVoters();
         this.componentUtil.hideLoading();
       });
     });
@@ -141,69 +159,57 @@ export class VotersPage implements OnInit {
 
   onVoterInput(event: any) {
     // set val to the value of the searchbar
-    const val = event.target.value;
-    this.voters = this.filterVoters(val);
+    const value = event.target.value;
+
+    // if (value === '') {
+    //   this.offset = 0;
+    //   this.loadVoters();
+    //   return;
+    // }
+
+    if (value !== this.searchValue) {
+      this.searchVoters = this.filterVoters(value);
+      this.offset = 0;
+      this.voters = [];
+      // this.content.scrollToTop(1500);
+      this.loadVoters();
+    }
+    this.searchValue = value;
   }
 
   setFilteredItems(event) {
     const val = event.target.value;
-    this.voters = this.filterVoters(val);
+    this.searchVoters = this.filterVoters(val);
   }
 
-  // async alertLocation() {
-  //   const changeLocation = await this.alertCtrl.create({
-  //     header: 'Change Location',
-  //     message: 'Type your Address.',
-  //     inputs: [
-  //       {
-  //         name: 'location',
-  //         placeholder: 'Enter your new Location',
-  //         type: 'text'
-  //       }
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         handler: data => {
-  //           console.log('Cancel clicked');
-  //         }
-  //       },
-  //       {
-  //         text: 'Change',
-  //         handler: async data => {
-  //           console.log('Change clicked', data);
-  //           this.yourLocation = data.location;
-  //           const toast = await this.toastCtrl.create({
-  //             message: 'Location was change successfully',
-  //             duration: 3000,
-  //             position: 'top',
-  //             closeButtonText: 'OK',
-  //             showCloseButton: true
-  //           });
+  loadVoters(loadMore = false, event?) {
+    if (loadMore) {
+      this.offset += 25;
+    }
 
-  //           toast.present();
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   changeLocation.present();
-  // }
+    setTimeout(() => {
+      this.getVoters(this.offset);
 
-  // async presentImage(image: any) {
-  //   const modal = await this.modalCtrl.create({
-  //     component: ImagePage,
-  //     componentProps: { value: image }
-  //   });
-  //   return await modal.present();
-  // }
+      if (event) {
+        event.target.complete();
+      }
 
-  // async notifications(ev: any) {
-  //   const popover = await this.popoverCtrl.create({
-  //     component: NotificationsComponent,
-  //     event: ev,
-  //     animated: true,
-  //     showBackdrop: true
-  //   });
-  //   return await popover.present();
-  // }
+      // Optional
+      if (this.offset === 125) {
+        this.infinite.disabled = true;
+      }
+    }, loadMore ? 500 : 0);
+  }
+
+  getVoters(offset) {
+    const voters = this.searchVoters.slice(this.offset, this.offset + 25);
+    this.voters = [...this.voters, ...voters];
+
+    console.log('voters');
+    console.log(this.voters.length);
+    console.log('searchVoters');
+    console.log(this.searchVoters.length);
+    console.log('localVoters');
+    console.log(this.localVoters.length);
+  }
 }

@@ -149,5 +149,6 @@
   "ta": "Tamil",
   "SEARCH": "Search Voter",
   "VERSION": "Version",
-  "V": "v"
+  "V": "v",
+  "LOADING_VOTERS": "Loading Voters..."
 }
